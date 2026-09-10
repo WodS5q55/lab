@@ -140,20 +140,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Book.cpp" />
-    <ClCompile Include="Library.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Menu.cpp" />
-    <ClCompile Include="Reader.cpp" />
-    <ClCompile Include="Source.cpp" />
-    <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="src\Book.cpp" />
+    <ClCompile Include="src\Library.cpp" />
+    <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Menu.cpp" />
+    <ClCompile Include="src\Reader.cpp" />
+    <ClCompile Include="src\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Book.h" />
-    <ClInclude Include="Menu.h" />
-    <ClInclude Include="Library.h" />
-    <ClInclude Include="Reader.h" />
-    <ClInclude Include="Utils.h" />
+    <ClInclude Include="include\Library.h" />
+    <ClInclude Include="include\Menu.h" />
+    <ClInclude Include="include\Reader.h" />
+    <ClInclude Include="include\Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
