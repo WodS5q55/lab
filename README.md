@@ -38,4 +38,4 @@
 * Нельзя зарегистрировать читателя с уже существующим именем.
 
 ## Качество кода
-Статический анализ кода выполнен с помощью [SonarCloud](https://sonarcloud.io/organizations/shiryajlmttmh/projects).
+Статический анализ кода выполнен с помощью [SonarCloud][https://sonarcloud.io/organizations/wods5q55/projects].
