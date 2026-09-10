@@ -374,6 +374,3 @@ x64/
 git rm --cached laba1.vcxproj.user
 git rm --cached laba1.vcxproj.filters
 
-git add .gitignore
-git commit -m "Удаление лишних файлов Visual Studio"
-git push
