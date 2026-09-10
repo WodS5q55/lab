@@ -377,20 +377,6 @@ bld/
 *.ilk
 *.log
 
-# Visual Studio
-.vs/
-*.user
-*.suo
-*.userosscache
-*.sln.docstates
-*.vcxproj.user
+git rm --cached laba1.vcxproj.user
+git rm --cached laba1.vcxproj.filters
 
-# Visual Studio Code
-.vscode/
-
-# Windows
-Thumbs.db
-Desktop.ini
-
-# Mac
-.DS_Store
