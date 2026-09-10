@@ -381,7 +381,7 @@ bld/
 .vs/
 *.user
 *.suo
-*.vcxproj.user
+*.vcxproj
 *.vcxproj.filter
 Debug/
 Release/
