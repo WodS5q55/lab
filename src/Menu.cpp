@@ -21,6 +21,7 @@ void show_menu(const Library& library) {
     cout << "9. Показать просроченные книги" << endl;
     cout << "10. Добавить книгу" << endl;
     cout << "11. Изменить ФИО читателя" << endl;
+    cout << "12. Удалить книгу" << endl; 
     cout << "0. Выход" << endl;
     cout << "-------------------------------------------" << endl;
     cout << "Текущий день: " << library.get_day_counter() << endl;
@@ -192,7 +193,7 @@ void run_menu(Library& library) {
                 library.add_book(new_book);
                 break;
             }
-            case 11: {  
+            case 11: {
                 Reader* reader = select_reader(library, "Выберите читателя для изменения ФИО:");
                 if (!reader) break;
 
@@ -207,6 +208,24 @@ void run_menu(Library& library) {
                 } while (new_name.empty() || is_blank(new_name));
 
                 library.change_reader_name(reader, new_name);
+                break;
+            }
+            case 12: { 
+                Book* book = select_any_book(library, "Выберите книгу для удаления:");
+                if (!book) break;
+
+                char confirm;
+                cout << "Вы уверены, что хотите удалить книгу \""
+                    << book->get_title() << "\"? (y/n): ";
+                cin >> confirm;
+                clear_input();
+
+                if (confirm == 'y' || confirm == 'Y') {
+                    library.remove_book(book);
+                }
+                else {
+                    cout << "Удаление отменено." << endl;
+                }
                 break;
             }
             case 0:

@@ -22,6 +22,8 @@ public:
     void add_book(const Book& book);
     void add_reader(const Reader& reader);
 
+    void remove_book(Book* book);
+
     const vector<Book>& get_books() const;
     const vector<Reader>& get_readers() const;
 
@@ -39,6 +41,7 @@ public:
     void display_overdue_books() const;
     void display_book_info(Book* book);
     void display_reader_info(Reader* reader);
+
     void change_reader_name(Reader* reader, string new_name);
     void change_reader_phone(Reader* reader, string new_phone);
 

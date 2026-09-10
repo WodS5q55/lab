@@ -66,6 +66,22 @@ void Library::add_book(const Book& book) {
     cout << "[OK] Книга \"" << book.get_title() << "\" добавлена в библиотеку!" << endl;
 }
 
+void Library::remove_book(Book* book) {
+    if (book->get_status() == BORROWED) {
+        throw logic_error("Нельзя удалить книгу, которая выдана читателю");
+    }
+
+    for (auto it = books.begin(); it != books.end(); ++it) {
+        if (it->get_title() == book->get_title() && it->get_author() == book->get_author()) {
+            cout << "[OK] Книга \"" << it->get_title() << "\" удалена из библиотеки!" << endl;
+            books.erase(it);
+            return;
+        }
+    }
+
+    throw invalid_argument("Книга не найдена");
+}
+
 void Library::add_reader(const Reader& reader) {
     for (const auto& r : readers) {
         if (r.get_name() == reader.get_name()) {
@@ -75,17 +91,6 @@ void Library::add_reader(const Reader& reader) {
     readers.push_back(reader);
     cout << "[OK] Читатель \"" << reader.get_name() << "\" зарегистрирован (ID: " << reader.get_id() << ")" << endl;
 }
-
-void Library::change_reader_name(Reader* reader, string new_name) {
-    for (const auto& r : readers) {
-        if (r.get_id() != reader->get_id() && r.get_name() == new_name) {
-            throw invalid_argument("Читатель с таким именем уже зарегистрирован");
-        }
-    }
-    reader->set_name(new_name);
-    cout << "[OK] ФИО читателя ID " << reader->get_id() << " изменено на: " << new_name << endl;
-}
-
 
 const vector<Book>& Library::get_books() const { return books; }
 const vector<Reader>& Library::get_readers() const { return readers; }
@@ -223,6 +228,16 @@ void Library::display_book_info(Book* book) {
 
 void Library::display_reader_info(Reader* reader) {
     reader->display_info();
+}
+
+void Library::change_reader_name(Reader* reader, string new_name) {
+    for (const auto& r : readers) {
+        if (r.get_id() != reader->get_id() && r.get_name() == new_name) {
+            throw invalid_argument("Читатель с таким именем уже зарегистрирован");
+        }
+    }
+    reader->set_name(new_name);
+    cout << "[OK] ФИО читателя ID " << reader->get_id() << " изменено на: " << new_name << endl;
 }
 
 void Library::change_reader_phone(Reader* reader, string new_phone) {
