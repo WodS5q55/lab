@@ -1,10 +1,10 @@
 #include "Library.h"
+#include "Utils.h"
 #include <iostream>
 #include <stdexcept>
 #include <algorithm>
 
 using namespace std;
-
 
 Library::Library() {
     day_counter = 1;
@@ -43,6 +43,29 @@ Library::Library() {
     }
 }
 
+void Library::add_book(const Book& book) {
+    if (book.get_title().empty() || is_blank(book.get_title())) {
+        throw invalid_argument("Название книги не может быть пустым");
+    }
+    if (book.get_author().empty() || is_blank(book.get_author())) {
+        throw invalid_argument("Автор книги не может быть пустым");
+    }
+    if (book.get_year() < 0 || book.get_year() > 2026) {
+        throw invalid_argument("Год издания должен быть от 0 до 2026");
+    }
+    string type = book.get_type();
+    if (type != "учебник" && type != "методическое пособие" && type != "монография") {
+        throw invalid_argument("Тип книги должен быть: учебник, методическое пособие или монография");
+    }
+    for (const auto& b : books) {
+        if (b.get_title() == book.get_title() && b.get_author() == book.get_author()) {
+            throw invalid_argument("Книга с таким названием и автором уже существует");
+        }
+    }
+    books.push_back(book);
+    cout << "[OK] Книга \"" << book.get_title() << "\" добавлена в библиотеку!" << endl;
+}
+
 void Library::add_reader(const Reader& reader) {
     for (const auto& r : readers) {
         if (r.get_name() == reader.get_name()) {
@@ -65,26 +88,6 @@ Book* Library::find_book_by_title(const string& title) {
     return nullptr;
 }
 
-vector<Book*> Library::find_books_by_author(const string& author) {
-    vector<Book*> result;
-    for (auto& book : books) {
-        if (book.get_author() == author) {
-            result.push_back(&book);
-        }
-    }
-    return result;
-}
-
-vector<Book*> Library::find_books_by_type(const string& type) {
-    vector<Book*> result;
-    for (auto& book : books) {
-        if (book.get_type() == type) {
-            result.push_back(&book);
-        }
-    }
-    return result;
-}
-
 vector<Book*> Library::find_available_books() {
     vector<Book*> result;
     for (auto& book : books) {
@@ -103,16 +106,6 @@ vector<Book*> Library::find_borrowed_books() {
         }
     }
     return result;
-}
-
-vector<string> Library::get_distinct_authors() const {
-    vector<string> authors;
-    for (const auto& book : books) {
-        if (find(authors.begin(), authors.end(), book.get_author()) == authors.end()) {
-            authors.push_back(book.get_author());
-        }
-    }
-    return authors;
 }
 
 Reader* Library::find_reader_by_id(int id) {
@@ -152,35 +145,6 @@ void Library::return_book(Book* book) {
     catch (const exception& e) {
         throw runtime_error(string("Ошибка возврата: ") + e.what());
     }
-}
-
-void Library::add_book(const Book& book) {
-
-    if (book.get_title().empty() || is_blank(book.get_title())) {
-        throw invalid_argument("Название книги не может быть пустым");
-    }
-
-    if (book.get_author().empty() || is_blank(book.get_author())) {
-        throw invalid_argument("Автор книги не может быть пустым");
-    }
-
-    if (book.get_year() < 0 || book.get_year() > 2026) {
-        throw invalid_argument("Год издания должен быть от 0 до 2026");
-    }
-
-    string type = book.get_type();
-    if (type != "учебник" && type != "методическое пособие" && type != "монография") {
-        throw invalid_argument("Тип книги должен быть: учебник, методическое пособие или монография");
-    }
-
-    for (const auto& b : books) {
-        if (b.get_title() == book.get_title() && b.get_author() == book.get_author()) {
-            throw invalid_argument("Книга с таким названием и автором уже существует в библиотеке");
-        }
-    }
-
-    books.push_back(book);
-    cout << "[OK] Книга \"" << book.get_title() << "\" добавлена в библиотеку!" << endl;
 }
 
 void Library::pass_day() {
@@ -264,34 +228,6 @@ void Library::print_book_line(const Book& book, bool with_author) const {
         cout << " (" << book.get_year() << " г.) [" << book.get_type() << "]";
     }
     cout << " - " << status_to_string(book.get_status(), book.get_days_left()) << endl;
-}
-
-void Library::print_books_by_author(const string& author) {
-    vector<Book*> found = find_books_by_author(author);
-    cout << "\nКНИГИ АВТОРА \"" << author << "\":" << endl;
-    cout << "-------------------------------------------" << endl;
-    if (found.empty()) {
-        cout << "Книг этого автора не найдено" << endl;
-        return;
-    }
-    for (const auto& book : found) {
-        print_book_line(*book, false);
-    }
-    cout << "-------------------------------------------" << endl;
-}
-
-void Library::print_books_by_type(const string& type) {
-    vector<Book*> found = find_books_by_type(type);
-    cout << "\nКНИГИ ТИПА \"" << type << "\":" << endl;
-    cout << "-------------------------------------------" << endl;
-    if (found.empty()) {
-        cout << "Книг этого типа не найдено" << endl;
-        return;
-    }
-    for (const auto& book : found) {
-        print_book_line(*book, true);
-    }
-    cout << "-------------------------------------------" << endl;
 }
 
 int Library::get_book_count() const { return books.size(); }
