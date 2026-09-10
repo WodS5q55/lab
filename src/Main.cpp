@@ -6,16 +6,13 @@
 using namespace std;
 
 int main() {
-#ifdef _WIN32
     setlocale(LC_ALL, "Russian");
-#else
-    setlocale(LC_ALL, "");
-#endif
+
 
     Library library;
 
     cout << "\n===========================================" << endl;
-    cout << "   ÄÎÁÐÎ ÏÎÆÀËÎÂÀÒÜ Â ÓÍÈÂÅÐÑÈÒÅÒÑÊÓÞ ÁÈÁËÈÎÒÅÊÓ!" << endl;
+    cout << "   Ã„ÃŽÃÃÃŽ ÃÃŽÃ†Ã€Ã‹ÃŽÃ‚Ã€Ã’Ãœ Ã‚ Ã“ÃÃˆÃ‚Ã…ÃÃ‘ÃˆÃ’Ã…Ã’Ã‘ÃŠÃ“Ãž ÃÃˆÃÃ‹ÃˆÃŽÃ’Ã…ÃŠÃ“!" << endl;
     cout << "===========================================" << endl;
 
     run_menu(library);
