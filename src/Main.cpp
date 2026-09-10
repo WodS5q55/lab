@@ -1,12 +1,38 @@
 #include "Library.h"
 #include "Utils.h"
 #include <iostream>
+#include <limits>
+#include <cctype>
 
 using namespace std;
 
+void show_menu(const Library& library) {
+    cout << "\n===========================================" << endl;
+    cout << "       УНИВЕРСИТЕТСКАЯ БИБЛИОТЕКА" << endl;
+    cout << "===========================================" << endl;
+    cout << "1. Зарегистрировать читателя" << endl;
+    cout << "2. Выдать книгу" << endl;
+    cout << "3. Вернуть книгу" << endl;
+    cout << "4. Показать все книги" << endl;
+    cout << "5. Показать всех читателей" << endl;
+    cout << "6. Показать информацию о книге" << endl;
+    cout << "7. Показать информацию о читателе" << endl;
+    cout << "8. Изменить телефон читателя" << endl;
+    cout << "9. Показать просроченные книги" << endl;
+    cout << "10. Добавить книгу" << endl;
+    cout << "0. Выход" << endl;
+    cout << "-------------------------------------------" << endl;
+    cout << "Текущий день: " << library.get_day_counter() << endl;
+    cout << "-------------------------------------------" << endl;
+    cout << "Выберите действие: ";
+}
 
 int main() {
+#ifdef _WIN32
     setlocale(LC_ALL, "Russian");
+#else
+    setlocale(LC_ALL, "");
+#endif
 
     Library library;
     int choice;
@@ -29,11 +55,18 @@ int main() {
             switch (choice) {
             case 1: {
                 string name, phone;
-                cout << "Введите ФИО читателя: ";
-                clear_input();
-                getline(cin, name);
+                do {
+                    cout << "Введите ФИО читателя: ";
+                    clear_input();
+                    getline(cin, name);
+                    if (name.empty() || is_blank(name)) {
+                        cout << "[ОШИБКА] Имя не может быть пустым!" << endl;
+                    }
+                } while (name.empty() || is_blank(name));
+
                 cout << "Введите номер телефона: ";
                 getline(cin, phone);
+
                 Reader reader(name, phone);
                 library.add_reader(reader);
                 break;
@@ -98,28 +131,6 @@ int main() {
                 library.display_overdue_books();
                 break;
             case 10: {
-                vector<string> authors = library.get_distinct_authors();
-                if (authors.empty()) {
-                    cout << "[ОШИБКА] Нет авторов в каталоге." << endl;
-                    break;
-                }
-                int idx = select_from_list(authors, "Выберите автора:");
-                if (idx < 0) break;
-                library.print_books_by_author(authors[static_cast<size_t>(idx)]);
-                break;
-            }
-            case 11: {
-                vector<string> types = { "учебник", "методическое пособие", "монография" };
-                int idx = select_from_list(types, "Выберите тип книги:");
-                if (idx < 0) break;
-                library.print_books_by_type(types[static_cast<size_t>(idx)]);
-                break;
-            }
-            case 12:
-                library.pass_day();
-                break;
-
-            case 13: {
                 cout << "\n--- ДОБАВЛЕНИЕ НОВОЙ КНИГИ ---" << endl;
 
                 string title, author;
@@ -127,10 +138,9 @@ int main() {
                 string type;
                 int type_choice;
 
-
                 do {
                     cout << "Введите название книги: ";
-                    clear_input();
+                    cin >> ws;
                     getline(cin, title);
                     if (title.empty() || is_blank(title)) {
                         cout << "[ОШИБКА] Название не может быть пустым!" << endl;
@@ -139,6 +149,7 @@ int main() {
 
                 do {
                     cout << "Введите автора книги: ";
+                    cin >> ws;
                     getline(cin, author);
                     if (author.empty() || is_blank(author)) {
                         cout << "[ОШИБКА] Автор не может быть пустым!" << endl;
@@ -157,7 +168,7 @@ int main() {
                         cout << "[ОШИБКА] Год должен быть от 0 до 2026!" << endl;
                     }
                 } while (year < 0 || year > 2026);
-                
+                clear_input();
 
                 do {
                     cout << "Выберите тип книги:" << endl;
