@@ -34,6 +34,13 @@ void Reader::set_phone(string new_phone) {
     phone = new_phone;
 }
 
+void Reader::set_name(string new_name) {
+    if (new_name.empty()) {
+        throw invalid_argument("Имя читателя не может быть пустым");
+    }
+    full_name = new_name;
+}
+
 void Reader::display_info() const {
     cout << "-------------------------------------------" << endl;
     cout << "ЧИТАТЕЛЬ" << endl;

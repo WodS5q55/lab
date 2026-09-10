@@ -76,6 +76,17 @@ void Library::add_reader(const Reader& reader) {
     cout << "[OK] Читатель \"" << reader.get_name() << "\" зарегистрирован (ID: " << reader.get_id() << ")" << endl;
 }
 
+void Library::change_reader_name(Reader* reader, string new_name) {
+    for (const auto& r : readers) {
+        if (r.get_id() != reader->get_id() && r.get_name() == new_name) {
+            throw invalid_argument("Читатель с таким именем уже зарегистрирован");
+        }
+    }
+    reader->set_name(new_name);
+    cout << "[OK] ФИО читателя ID " << reader->get_id() << " изменено на: " << new_name << endl;
+}
+
+
 const vector<Book>& Library::get_books() const { return books; }
 const vector<Reader>& Library::get_readers() const { return readers; }
 

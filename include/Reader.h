@@ -19,8 +19,11 @@ public:
     string get_phone() const;
     int get_id() const;
 
+    void set_name(string new_name);
+
     void set_phone(string new_phone);
+
     void display_info() const;
 };
 
-#endif#pragma once
+#endif

@@ -39,6 +39,7 @@ public:
     void display_overdue_books() const;
     void display_book_info(Book* book);
     void display_reader_info(Reader* reader);
+    void change_reader_name(Reader* reader, string new_name);
     void change_reader_phone(Reader* reader, string new_phone);
 
     int get_book_count() const;

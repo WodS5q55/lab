@@ -20,6 +20,7 @@ void show_menu(const Library& library) {
     cout << "8. Изменить телефон читателя" << endl;
     cout << "9. Показать просроченные книги" << endl;
     cout << "10. Добавить книгу" << endl;
+    cout << "11. Изменить ФИО читателя" << endl;
     cout << "0. Выход" << endl;
     cout << "-------------------------------------------" << endl;
     cout << "Текущий день: " << library.get_day_counter() << endl;
@@ -189,6 +190,23 @@ void run_menu(Library& library) {
 
                 Book new_book(title, author, year, type);
                 library.add_book(new_book);
+                break;
+            }
+            case 11: {  
+                Reader* reader = select_reader(library, "Выберите читателя для изменения ФИО:");
+                if (!reader) break;
+
+                string new_name;
+                do {
+                    cout << "Введите новое ФИО: ";
+                    clear_input();
+                    getline(cin, new_name);
+                    if (new_name.empty() || is_blank(new_name)) {
+                        cout << "[ОШИБКА] ФИО не может быть пустым!" << endl;
+                    }
+                } while (new_name.empty() || is_blank(new_name));
+
+                library.change_reader_name(reader, new_name);
                 break;
             }
             case 0:
