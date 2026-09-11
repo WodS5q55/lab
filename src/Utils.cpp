@@ -73,8 +73,8 @@ Reader* select_reader(Library& library, const string& prompt) {
 
 Book* select_any_book(Library& library, const string& prompt) {
     vector<Book*> all;
-    for (const auto& b : library.get_books()) {
-        all.push_back(library.find_book_by_title(b.get_title()));
+    for (auto& b : library.get_books_mutable()) {
+        all.push_back(&b);
     }
     return select_book(all, prompt);
 }

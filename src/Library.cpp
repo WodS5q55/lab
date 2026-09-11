@@ -88,14 +88,6 @@ void Library::add_reader(const Reader& reader) {
 const vector<Book>& Library::get_books() const { return books; }
 const vector<Reader>& Library::get_readers() const { return readers; }
 
-Book* Library::find_book_by_title(const string& title) {
-    for (auto& book : books) {
-        if (book.get_title() == title) {
-            return &book;
-        }
-    }
-    return nullptr;
-}
 
 vector<Book*> Library::find_available_books() {
     vector<Book*> result;

@@ -35,6 +35,7 @@ public:
     void borrow_book(Book* book, Reader* reader);
     void return_book(Book* book);
     void pass_day();
+    vector<Book>& get_books_mutable() { return books; }
 
     void display_all_books() const;
     void display_all_readers() const;
