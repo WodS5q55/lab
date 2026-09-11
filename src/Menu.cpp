@@ -42,7 +42,6 @@ void run_menu(Library& library) {
             continue;
         }
 
-        try {
             switch (choice) {
             case 1: {
                 string name, phone;
@@ -235,10 +234,6 @@ void run_menu(Library& library) {
                 cout << "[ÎØÈÁÊÀ] Íåâåðíûé âûáîð. Ïîïðîáóéòå ñíîâà." << endl;
             }
         }
-        catch (const exception& e) {
-            cout << "[ÎØÈÁÊÀ] " << e.what() << endl;
-            clear_input();
-        }
 
-    } while (choice != 0);
+    while (choice != 0);
 }
