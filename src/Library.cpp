@@ -34,13 +34,6 @@ Library::Library() {
     books[2].borrow_book(readers[0].get_id(), 14);
     books[6].borrow_book(readers[1].get_id(), 1);
 
-    for (int i = 0; i < 2; i++) {
-        for (auto& book : books) {
-            if (book.get_status() == BORROWED && book.get_days_left() > 0) {
-                book.decrease_days();
-            }
-        }
-    }
 }
 
 void Library::add_book(const Book& book) {
