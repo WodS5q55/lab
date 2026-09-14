@@ -154,10 +154,10 @@ void run_menu(Library& library) {
                         cout << "[ÎØÈÁÊÀ] Ââåäèòå ÷èñëî!" << endl;
                         continue;
                     }
-                    if (year < 0 || year > 2026) {
-                        cout << "[ÎØÈÁÊÀ] Ãîä äîëæåí áûòü îò 0 äî 2026!" << endl;
+                    if (year < 1452 || year > 2026) {
+                        cout << "[ÎØÈÁÊÀ] Ãîä äîëæåí áûòü îò 1452 äî 2026!" << endl;
                     }
-                } while (year < 0 || year > 2026);
+                } while (year < 1452 || year > 2026);
                 clear_input();
 
                 do {

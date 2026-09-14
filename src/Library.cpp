@@ -148,27 +148,6 @@ void Library::return_book(Book* book) {
     }
 }
 
-void Library::pass_day() {
-    day_counter++;
-    cout << "\n[ÄÅÍÜ " << day_counter << "]" << endl;
-    cout << "-------------------------------------------" << endl;
-
-    bool has_changes = false;
-    for (auto& book : books) {
-        if (book.get_status() == BORROWED && book.get_days_left() > 0) {
-            book.decrease_days();
-            has_changes = true;
-        }
-    }
-    if (has_changes) {
-        cout << "Ïðîø¸ë îäèí äåíü. Ñðîêè âîçâðàòà óìåíüøåíû." << endl;
-    }
-    else {
-        cout << "Íåò àêòèâíûõ âûäà÷." << endl;
-    }
-    cout << "-------------------------------------------" << endl;
-}
-
 void Library::display_all_books() const {
     cout << "\nÁÈÁËÈÎÒÅ×ÍÛÉ ÊÀÒÀËÎÃ (" << books.size() << " êíèã)" << endl;
     cout << "-------------------------------------------" << endl;

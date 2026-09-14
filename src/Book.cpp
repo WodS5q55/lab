@@ -8,7 +8,7 @@ Book::Book(string book_title, string book_author, int pub_year, string book_type
     if (book_title.empty() || book_author.empty()) {
         throw invalid_argument("Название и автор книги не могут быть пустыми");
     }
-    if (pub_year < 0 || pub_year > 2026) {
+    if (pub_year < 1452 || pub_year > 2026) {
         throw invalid_argument("Некорректный год издания");
     }
     if (book_type != "учебник" && book_type != "методическое пособие" && book_type != "монография") {
