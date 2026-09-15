@@ -1,4 +1,4 @@
-#include "Library.h"
+п»ї#include "Library.h"
 #include "Utils.h"
 #include <iostream>
 #include <stdexcept>
@@ -6,85 +6,129 @@
 
 using namespace std;
 
+const int MAX_BORROW_DAYS = 14;
+
 Library::Library() {
-    day_counter = 1;
+    books.push_back(Book("Р’С‹СЃС€Р°СЏ РјР°С‚РµРјР°С‚РёРєР°", "РРІР°РЅРѕРІ Рђ.Рђ.", 2020, "СѓС‡РµР±РЅРёРє"));
+    books.push_back(Book("Р”РёСЃРєСЂРµС‚РЅР°СЏ РјР°С‚РµРјР°С‚РёРєР°", "РРІР°РЅРѕРІ Рђ.Рђ.", 2021, "СѓС‡РµР±РЅРёРє"));
+    books.push_back(Book("Р¤РёР·РёРєР° РґР»СЏ РёРЅР¶РµРЅРµСЂРѕРІ", "РџРµС‚СЂРѕРІ Р‘.Р’.", 2019, "СѓС‡РµР±РЅРёРє"));
+    books.push_back(Book("РџСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ РЅР° C++", "РЎРёРґРѕСЂРѕРІ Р’.Р“.", 2021, "СѓС‡РµР±РЅРёРє"));
+    books.push_back(Book("РћСЃРЅРѕРІС‹ Р±Р°Р· РґР°РЅРЅС‹С…", "РљРѕР·Р»РѕРІР° Р•.Рњ.", 2022, "СѓС‡РµР±РЅРёРє"));
+    books.push_back(Book("РўРµРѕСЂРёСЏ РІРµСЂРѕСЏС‚РЅРѕСЃС‚РµР№", "РљРѕР·Р»РѕРІР° Р•.Рњ.", 2021, "СѓС‡РµР±РЅРёРє"));
+    books.push_back(Book("РњРµС‚РѕРґРёРєР° СЂРµС€РµРЅРёСЏ Р·Р°РґР°С‡ РїРѕ С„РёР·РёРєРµ", "РЎРјРёСЂРЅРѕРІ Р”.Рђ.", 2020, "РјРµС‚РѕРґРёС‡РµСЃРєРѕРµ РїРѕСЃРѕР±РёРµ"));
+    books.push_back(Book("РџСЂР°РєС‚РёРєСѓРј РїРѕ РїСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёСЋ", "Р’Р°СЃРёР»СЊРµРІР° Рћ.Р.", 2021, "РјРµС‚РѕРґРёС‡РµСЃРєРѕРµ РїРѕСЃРѕР±РёРµ"));
+    books.push_back(Book("РЎРѕРІСЂРµРјРµРЅРЅС‹Рµ Р°Р»РіРѕСЂРёС‚РјС‹ РјР°С€РёРЅРЅРѕРіРѕ РѕР±СѓС‡РµРЅРёСЏ", "РќРѕРІРёРєРѕРІ РЎ.Рџ.", 2023, "РјРѕРЅРѕРіСЂР°С„РёСЏ"));
+    books.push_back(Book("РСЃРєСѓСЃСЃС‚РІРµРЅРЅС‹Р№ РёРЅС‚РµР»Р»РµРєС‚ Рё РЅРµР№СЂРѕСЃРµС‚Рё", "РњРёС…Р°Р№Р»РѕРІ Рђ.Рќ.", 2022, "РјРѕРЅРѕРіСЂР°С„РёСЏ"));
 
-    books.push_back(Book("Высшая математика", "Иванов А.А.", 2020, "учебник"));
-    books.push_back(Book("Дискретная математика", "Иванов А.А.", 2021, "учебник"));
-    books.push_back(Book("Физика для инженеров", "Петров Б.В.", 2019, "учебник"));
-    books.push_back(Book("Программирование на C++", "Сидоров В.Г.", 2021, "учебник"));
-    books.push_back(Book("Основы баз данных", "Козлова Е.М.", 2022, "учебник"));
-    books.push_back(Book("Теория вероятностей", "Козлова Е.М.", 2021, "учебник"));
-    books.push_back(Book("Методика решения задач по физике", "Смирнов Д.А.", 2020, "методическое пособие"));
-    books.push_back(Book("Практикум по программированию", "Васильева О.И.", 2021, "методическое пособие"));
-    books.push_back(Book("Современные алгоритмы машинного обучения", "Новиков С.П.", 2023, "монография"));
-    books.push_back(Book("Искусственный интеллект и нейросети", "Михайлов А.Н.", 2022, "монография"));
+    borrow_dates.resize(books.size(), 0);
 
-    readers.push_back(Reader("Алексей Иванов", "+375292245423"));
-    readers.push_back(Reader("Никита Драбудько", "+375684539212"));
-    readers.push_back(Reader("Дмитрий Сидоров", "+375197652934"));
-    readers.push_back(Reader("Елена Смирнова", "+375451783256"));
-    readers.push_back(Reader("Ольга Кузнецова", "+375998563341"));
-    readers.push_back(Reader("Сергей Новиков", "+375872114598"));
-    readers.push_back(Reader("Анна Васильева", "+375759938782"));
-    readers.push_back(Reader("Игорь Михайлов", "+375344436121"));
-    readers.push_back(Reader("Наталья Морозова", "+375875596214"));
-    readers.push_back(Reader("Павел Козлов", "+375859967546"));
+    readers.push_back(Reader("РђР»РµРєСЃРµР№ РРІР°РЅРѕРІ", "+375292245423"));
+    readers.push_back(Reader("РќРёРєРёС‚Р° Р”СЂР°Р±СѓРґСЊРєРѕ", "+375684539212"));
+    readers.push_back(Reader("Р”РјРёС‚СЂРёР№ РЎРёРґРѕСЂРѕРІ", "+375197652934"));
+    readers.push_back(Reader("Р•Р»РµРЅР° РЎРјРёСЂРЅРѕРІР°", "+375451783256"));
+    readers.push_back(Reader("РћР»СЊРіР° РљСѓР·РЅРµС†РѕРІР°", "+375998563341"));
+    readers.push_back(Reader("РЎРµСЂРіРµР№ РќРѕРІРёРєРѕРІ", "+375872114598"));
+    readers.push_back(Reader("РђРЅРЅР° Р’Р°СЃРёР»СЊРµРІР°", "+375759938782"));
+    readers.push_back(Reader("РРіРѕСЂСЊ РњРёС…Р°Р№Р»РѕРІ", "+375344436121"));
+    readers.push_back(Reader("РќР°С‚Р°Р»СЊСЏ РњРѕСЂРѕР·РѕРІР°", "+375875596214"));
+    readers.push_back(Reader("РџР°РІРµР» РљРѕР·Р»РѕРІ", "+375859967546"));
 
+}
+
+int Library::find_book_index(Book* book) const {
+    for (size_t i = 0; i < books.size(); i++) {
+        if (&books[i] == book) {
+            return static_cast<int>(i);
+        }
+    }
+    return -1;
+}
+
+int Library::get_days_left(Book* book) const {
+    int idx = find_book_index(book);
+    if (idx == -1) return 0;
+    if (borrow_dates[idx] == 0) return 0;
+
+    time_t due_date = borrow_dates[idx] + (MAX_BORROW_DAYS * 24 * 60 * 60);
+
+    time_t now = time(0);
+    double seconds_left = difftime(due_date, now);
+
+    return static_cast<int>(seconds_left / (24 * 60 * 60));
+}
+
+bool Library::is_overdue(Book* book) const {
+    if (book->get_status() != BORROWED) return false;
+    return get_days_left(book) < 0;
+}
+
+time_t Library::get_borrow_date(Book* book) const {
+    int idx = find_book_index(book);
+    return (idx != -1) ? borrow_dates[idx] : 0;
 }
 
 void Library::add_book(const Book& book) {
     if (book.get_title().empty() || is_blank(book.get_title())) {
-        throw invalid_argument("Название книги не может быть пустым");
+        throw invalid_argument("РќР°Р·РІР°РЅРёРµ РєРЅРёРіРё РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј");
     }
     if (book.get_author().empty() || is_blank(book.get_author())) {
-        throw invalid_argument("Автор книги не может быть пустым");
+        throw invalid_argument("РђРІС‚РѕСЂ РєРЅРёРіРё РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј");
     }
-    if (book.get_year() < 0 || book.get_year() > 2026) {
-        throw invalid_argument("Год издания должен быть от 1452 до 2026");
+    if (book.get_year() < 1452 || book.get_year() > 2026) {
+        throw invalid_argument("Р“РѕРґ РёР·РґР°РЅРёСЏ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РѕС‚ 0 РґРѕ 2026");
     }
     string type = book.get_type();
-    if (type != "учебник" && type != "методическое пособие" && type != "монография") {
-        throw invalid_argument("Тип книги должен быть: учебник, методическое пособие или монография");
+    if (type != "СѓС‡РµР±РЅРёРє" && type != "РјРµС‚РѕРґРёС‡РµСЃРєРѕРµ РїРѕСЃРѕР±РёРµ" && type != "РјРѕРЅРѕРіСЂР°С„РёСЏ") {
+        throw invalid_argument("РўРёРї РєРЅРёРіРё РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ: СѓС‡РµР±РЅРёРє, РјРµС‚РѕРґРёС‡РµСЃРєРѕРµ РїРѕСЃРѕР±РёРµ РёР»Рё РјРѕРЅРѕРіСЂР°С„РёСЏ");
     }
     for (const auto& b : books) {
         if (b.get_title() == book.get_title() && b.get_author() == book.get_author()) {
-            throw invalid_argument("Книга с таким названием и автором уже существует");
+            throw invalid_argument("РљРЅРёРіР° СЃ С‚Р°РєРёРј РЅР°Р·РІР°РЅРёРµРј Рё Р°РІС‚РѕСЂРѕРј СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚");
         }
     }
     books.push_back(book);
-    cout << "[OK] Книга \"" << book.get_title() << "\" добавлена в библиотеку!" << endl;
-}
-
-void Library::remove_book(Book* book) {
-    if (book->get_status() == BORROWED) {
-        throw logic_error("Нельзя удалить книгу, которая выдана читателю");
-    }
-
-    for (auto it = books.begin(); it != books.end(); ++it) {
-        if (it->get_title() == book->get_title() && it->get_author() == book->get_author()) {
-            cout << "[OK] Книга \"" << it->get_title() << "\" удалена из библиотеки!" << endl;
-            books.erase(it);
-            return;
-        }
-    }
-
-    throw invalid_argument("Книга не найдена");
+    borrow_dates.push_back(0); 
+    cout << "[OK] РљРЅРёРіР° \"" << book.get_title() << "\" РґРѕР±Р°РІР»РµРЅР° РІ Р±РёР±Р»РёРѕС‚РµРєСѓ!" << endl;
 }
 
 void Library::add_reader(const Reader& reader) {
     for (const auto& r : readers) {
         if (r.get_name() == reader.get_name()) {
-            throw invalid_argument("Читатель с таким именем уже зарегистрирован");
+            throw invalid_argument("Р§РёС‚Р°С‚РµР»СЊ СЃ С‚Р°РєРёРј РёРјРµРЅРµРј СѓР¶Рµ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅ");
         }
     }
     readers.push_back(reader);
-    cout << "[OK] Читатель \"" << reader.get_name() << "\" зарегистрирован (ID: " << reader.get_id() << ")" << endl;
+    cout << "[OK] Р§РёС‚Р°С‚РµР»СЊ \"" << reader.get_name() << "\" Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅ (ID: " << reader.get_id() << ")" << endl;
+}
+
+void Library::remove_book(Book* book) {
+    if (book->get_status() == BORROWED) {
+        throw logic_error("РќРµР»СЊР·СЏ СѓРґР°Р»РёС‚СЊ РєРЅРёРіСѓ, РєРѕС‚РѕСЂР°СЏ РІС‹РґР°РЅР° С‡РёС‚Р°С‚РµР»СЋ");
+    }
+
+    for (size_t i = 0; i < books.size(); i++) {
+        if (&books[i] == book) {
+            books.erase(books.begin() + i);
+            borrow_dates.erase(borrow_dates.begin() + i); 
+            cout << "[OK] РљРЅРёРіР° \"" << book->get_title() << "\" СѓРґР°Р»РµРЅР° РёР· Р±РёР±Р»РёРѕС‚РµРєРё!" << endl;
+            return;
+        }
+    }
+    throw invalid_argument("РљРЅРёРіР° РЅРµ РЅР°Р№РґРµРЅР°");
 }
 
 const vector<Book>& Library::get_books() const { return books; }
 const vector<Reader>& Library::get_readers() const { return readers; }
+vector<Book>& Library::get_books_mutable() { return books; }
 
+Book* Library::find_book_by_title(const string& title) {
+    for (auto& book : books) {
+        if (book.get_title() == title) {
+            return &book;
+        }
+    }
+    return nullptr;
+}
 
 vector<Book*> Library::find_available_books() {
     vector<Book*> result;
@@ -115,72 +159,154 @@ Reader* Library::find_reader_by_id(int id) {
     return nullptr;
 }
 
-void Library::borrow_book(Book* book, Reader* reader) {
-        book->borrow_book(reader->get_id());
-        cout << "[OK] Книга \"" << book->get_title() << "\" выдана студенту "
-            << reader->get_name() << " (ID: " << reader->get_id() << ")" << endl;
-        cout << "     Срок возврата: через 14 дней" << endl;
-    }
 
+void Library::borrow_book(Book* book, Reader* reader) {
+    try {
+        book->borrow_book(reader->get_id());
+
+
+        int idx = find_book_index(book);
+        if (idx == -1) {
+            throw runtime_error("РљРЅРёРіР° РЅРµ РЅР°Р№РґРµРЅР° РІ РєР°С‚Р°Р»РѕРіРµ");
+        }
+        borrow_dates[idx] = time(0);
+
+        cout << "[OK] РљРЅРёРіР° \"" << book->get_title() << "\" РІС‹РґР°РЅР° СЃС‚СѓРґРµРЅС‚Сѓ "
+            << reader->get_name() << " (ID: " << reader->get_id() << ")" << endl;
+        cout << "     РЎСЂРѕРє РІРѕР·РІСЂР°С‚Р°: " << MAX_BORROW_DAYS << " РґРЅРµР№" << endl;
+    }
+    catch (const exception& e) {
+        throw runtime_error(string("РћС€РёР±РєР° РІС‹РґР°С‡Рё: ") + e.what());
+    }
+}
 
 void Library::return_book(Book* book) {
     try {
         int reader_id = book->get_borrowed_by();
         book->return_book();
-        cout << "[OK] Книга \"" << book->get_title() << "\" возвращена в библиотеку";
+
+        int idx = find_book_index(book);
+        if (idx != -1) {
+            borrow_dates[idx] = 0;
+        }
+
+        cout << "[OK] РљРЅРёРіР° \"" << book->get_title() << "\" РІРѕР·РІСЂР°С‰РµРЅР° РІ Р±РёР±Р»РёРѕС‚РµРєСѓ";
         if (reader_id != -1) {
             Reader* reader = find_reader_by_id(reader_id);
             if (reader) {
-                cout << " (читатель " << reader->get_name() << ")";
+                cout << " (С‡РёС‚Р°С‚РµР»СЊ " << reader->get_name() << ")";
             }
         }
         cout << endl;
     }
     catch (const exception& e) {
-        throw runtime_error(string("Ошибка возврата: ") + e.what());
+        throw runtime_error(string("РћС€РёР±РєР° РІРѕР·РІСЂР°С‚Р°: ") + e.what());
     }
 }
 
 void Library::display_all_books() const {
-    cout << "\nБИБЛИОТЕЧНЫЙ КАТАЛОГ (" << books.size() << " книг)" << endl;
+    cout << "\nР‘РР‘Р›РРћРўР•Р§РќР«Р™ РљРђРўРђР›РћР“ (" << books.size() << " РєРЅРёРі)" << endl;
     cout << "-------------------------------------------" << endl;
-    for (const auto& book : books) {
-        cout << "* " << book.get_title() << " (" << book.get_author() << ", "
-            << book.get_year() << " г.) [" << book.get_type() << "] - "
-            << status_to_string(book.get_status()) << endl;
+
+    for (size_t i = 0; i < books.size(); i++) {
+        cout << "* " << books[i].get_title()
+            << " (" << books[i].get_author() << ", " << books[i].get_year() << " Рі.) "
+            << "[" << books[i].get_type() << "] - ";
+
+        if (books[i].get_status() == AVAILABLE) {
+            cout << "Р”РѕСЃС‚СѓРїРЅР°";
+        }
+        else {
+            if (borrow_dates[i] != 0) {
+                time_t due_date = borrow_dates[i] + (MAX_BORROW_DAYS * 24 * 60 * 60);
+                time_t now = time(0);
+                int days = static_cast<int>(difftime(due_date, now) / (24 * 60 * 60));
+
+                if (days > 0) {
+                    cout << "Р’С‹РґР°РЅР° (РѕСЃС‚Р°Р»РѕСЃСЊ " << days << " РґРЅ.)";
+                }
+                else if (days == 0) {
+                    cout << "Р’С‹РґР°РЅР° (РїРѕСЃР»РµРґРЅРёР№ РґРµРЅСЊ)";
+                }
+                else {
+                    cout << "РџР РћРЎР РћР§Р•РќРђ РЅР° " << -days << " РґРЅ.!";
+                }
+            }
+            else {
+                cout << "Р’С‹РґР°РЅР°";
+            }
+        }
+        cout << endl;
     }
     cout << "-------------------------------------------" << endl;
 }
 
 void Library::display_all_readers() const {
-    cout << "\nСПИСОК ЧИТАТЕЛЕЙ (" << readers.size() << " чел.)" << endl;
+    cout << "\nРЎРџРРЎРћРљ Р§РРўРђРўР•Р›Р•Р™ (" << readers.size() << " С‡РµР».)" << endl;
     cout << "-------------------------------------------" << endl;
     for (const auto& reader : readers) {
         cout << "ID " << reader.get_id() << ": " << reader.get_name()
-            << " (тел.: " << reader.get_phone() << ")" << endl;
+            << " (С‚РµР».: " << reader.get_phone() << ")" << endl;
     }
     cout << "-------------------------------------------" << endl;
 }
 
 void Library::display_overdue_books() const {
-    cout << "\nПРОСРОЧЕННЫЕ КНИГИ:" << endl;
+    cout << "\nРџР РћРЎР РћР§Р•РќРќР«Р• РљРќРР“Р:" << endl;
     cout << "-------------------------------------------" << endl;
+
     bool has_overdue = false;
-    for (const auto& book : books) {
-        if (book.is_overdue()) {
-            cout << "* " << book.get_title() << " (" << book.get_author() << ")" << endl;
-            cout << "  Выдана читателю ID: " << book.get_borrowed_by() << endl;
-            has_overdue = true;
+    for (size_t i = 0; i < books.size(); i++) {
+        if (books[i].get_status() == BORROWED && borrow_dates[i] != 0) {
+            time_t due_date = borrow_dates[i] + (MAX_BORROW_DAYS * 24 * 60 * 60);
+            time_t now = time(0);
+            int days = static_cast<int>(difftime(due_date, now) / (24 * 60 * 60));
+
+            if (days < 0) {
+                cout << "* " << books[i].get_title()
+                    << " (" << books[i].get_author() << ")" << endl;
+                cout << "  РџСЂРѕСЃСЂРѕС‡РµРЅР° РЅР° " << -days << " РґРЅ." << endl;
+                cout << "  Р’С‹РґР°РЅР° С‡РёС‚Р°С‚РµР»СЋ ID: " << books[i].get_borrowed_by() << endl;
+                has_overdue = true;
+            }
         }
     }
+
     if (!has_overdue) {
-        cout << "Просроченных книг нет" << endl;
+        cout << "РџСЂРѕСЃСЂРѕС‡РµРЅРЅС‹С… РєРЅРёРі РЅРµС‚" << endl;
     }
     cout << "-------------------------------------------" << endl;
 }
 
 void Library::display_book_info(Book* book) {
     book->display_info();
+
+    int idx = find_book_index(book);
+    if (idx == -1) return;
+
+    if (book->get_status() == BORROWED && borrow_dates[idx] != 0) {
+        tm ltm;
+        localtime_s(&ltm, &borrow_dates[idx]);
+        char buffer[11];
+        strftime(buffer, 11, "%d.%m.%Y", &ltm);
+        cout << "Р”Р°С‚Р° РІС‹РґР°С‡Рё: " << buffer << endl;
+
+        time_t due = borrow_dates[idx] + (MAX_BORROW_DAYS * 24 * 60 * 60);
+        localtime_s(&ltm, &due);
+        strftime(buffer, 11, "%d.%m.%Y", &ltm);
+        cout << "РЎСЂРѕРє РІРѕР·РІСЂР°С‚Р°: " << buffer << endl;
+
+        int days = get_days_left(book);
+        if (days > 0) {
+            cout << "РћСЃС‚Р°Р»РѕСЃСЊ РґРЅРµР№: " << days << endl;
+        }
+        else if (days == 0) {
+            cout << "РџРѕСЃР»РµРґРЅРёР№ РґРµРЅСЊ РІРѕР·РІСЂР°С‚Р°!" << endl;
+        }
+        else {
+            cout << "[Р’РќРРњРђРќРР•] РџСЂРѕСЃСЂРѕС‡РµРЅР° РЅР° " << -days << " РґРЅ.!" << endl;
+        }
+    }
 }
 
 void Library::display_reader_info(Reader* reader) {
@@ -190,29 +316,28 @@ void Library::display_reader_info(Reader* reader) {
 void Library::change_reader_name(Reader* reader, string new_name) {
     for (const auto& r : readers) {
         if (r.get_id() != reader->get_id() && r.get_name() == new_name) {
-            throw invalid_argument("Читатель с таким именем уже зарегистрирован");
+            throw invalid_argument("Р§РёС‚Р°С‚РµР»СЊ СЃ С‚Р°РєРёРј РёРјРµРЅРµРј СѓР¶Рµ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅ");
         }
     }
     reader->set_name(new_name);
-    cout << "[OK] ФИО читателя ID " << reader->get_id() << " изменено на: " << new_name << endl;
+    cout << "[OK] Р¤РРћ С‡РёС‚Р°С‚РµР»СЏ ID " << reader->get_id() << " РёР·РјРµРЅРµРЅРѕ РЅР°: " << new_name << endl;
 }
 
 void Library::change_reader_phone(Reader* reader, string new_phone) {
     reader->set_phone(new_phone);
-    cout << "[OK] Телефон читателя ID " << reader->get_id() << " изменён на: " << new_phone << endl;
+    cout << "[OK] РўРµР»РµС„РѕРЅ С‡РёС‚Р°С‚РµР»СЏ ID " << reader->get_id() << " РёР·РјРµРЅС‘РЅ РЅР°: " << new_phone << endl;
 }
 
 void Library::print_book_line(const Book& book, bool with_author) const {
     cout << "* " << book.get_title();
     if (with_author) {
-        cout << " (" << book.get_author() << ", " << book.get_year() << " г.)";
+        cout << " (" << book.get_author() << ", " << book.get_year() << " Рі.)";
     }
     else {
-        cout << " (" << book.get_year() << " г.) [" << book.get_type() << "]";
+        cout << " (" << book.get_year() << " Рі.) [" << book.get_type() << "]";
     }
     cout << " - " << status_to_string(book.get_status()) << endl;
 }
 
 int Library::get_book_count() const { return books.size(); }
 int Library::get_reader_count() const { return readers.size(); }
-int Library::get_day_counter() const { return day_counter; }

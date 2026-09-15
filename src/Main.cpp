@@ -7,11 +7,10 @@ using namespace std;
 
 int main() {
     setlocale(LC_ALL, "Rus");
-
     Library library;
 
     cout << "\n===========================================" << endl;
-    cout << "  Wel !" << endl;
+    cout << " ƒобро пожаловать в университетскую библиотеку!" << endl;
     cout << "===========================================" << endl;
 
     run_menu(library);

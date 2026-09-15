@@ -5,6 +5,7 @@
 #include "Reader.h"
 #include <vector>
 #include <string>
+#include <ctime>
 
 using namespace std;
 
@@ -12,8 +13,10 @@ class Library {
 private:
     vector<Book> books;
     vector<Reader> readers;
-    int day_counter;
 
+    vector<time_t> borrow_dates;   
+
+    int find_book_index(Book* book) const;
     void print_book_line(const Book& book, bool with_author) const;
 
 public:
@@ -21,11 +24,11 @@ public:
 
     void add_book(const Book& book);
     void add_reader(const Reader& reader);
-
     void remove_book(Book* book);
 
     const vector<Book>& get_books() const;
     const vector<Reader>& get_readers() const;
+    vector<Book>& get_books_mutable();
 
     Book* find_book_by_title(const string& title);
     vector<Book*> find_available_books();
@@ -34,8 +37,10 @@ public:
 
     void borrow_book(Book* book, Reader* reader);
     void return_book(Book* book);
-    void pass_day();
-    vector<Book>& get_books_mutable() { return books; }
+
+    int get_days_left(Book* book) const;
+    bool is_overdue(Book* book) const;
+    time_t get_borrow_date(Book* book) const;
 
     void display_all_books() const;
     void display_all_readers() const;
@@ -48,7 +53,6 @@ public:
 
     int get_book_count() const;
     int get_reader_count() const;
-    int get_day_counter() const;
 };
 
 #endif

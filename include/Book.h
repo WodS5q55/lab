@@ -2,7 +2,6 @@
 #define BOOK_H
 
 #include <string>
-#include <ctime>   // ← для time_t
 
 using namespace std;
 
@@ -21,7 +20,6 @@ private:
     string type;
     BookStatus status;
     int borrowed_by;
-    time_t borrow_date; 
 
 public:
     Book(string book_title, string book_author, int pub_year, string book_type);
@@ -33,16 +31,11 @@ public:
     BookStatus get_status() const;
     int get_borrowed_by() const;
 
-
-    time_t get_borrow_date() const;
-    int get_days_left() const;     
-    bool is_overdue() const;        
-
-    void borrow_book(int reader_id);  
+    void borrow_book(int reader_id);
     void return_book();
 
     string short_line() const;
-    void display_info() const;
+    void display_info() const;       
 };
 
 #endif
