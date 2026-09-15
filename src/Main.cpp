@@ -6,12 +6,12 @@
 using namespace std;
 
 int main() {
-    setlocale(LC_ALL, "Russian");
+    setlocale(LC_ALL, "Rus");
 
     Library library;
 
     cout << "\n===========================================" << endl;
-    cout << "   Welcome to the Library!" << endl;
+    cout << "  Wel !" << endl;
     cout << "===========================================" << endl;
 
     run_menu(library);

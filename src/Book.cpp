@@ -1,40 +1,35 @@
-#include "Book.h"
-#include "Library.h"
+п»ї#include "Book.h"
 #include <iostream>
 #include <stdexcept>
+#include <ctime>
 
 using namespace std;
 
+// РЎСЂРѕРє РІС‹РґР°С‡Рё вЂ” 14 РґРЅРµР№
+const int MAX_BORROW_DAYS = 14;
+
+string status_to_string(BookStatus status) {
+    return (status == AVAILABLE) ? "Р”РѕСЃС‚СѓРїРЅР°" : "Р’С‹РґР°РЅР°";
+}
+
 Book::Book(string book_title, string book_author, int pub_year, string book_type) {
     if (book_title.empty() || book_author.empty()) {
-        throw invalid_argument("Название и автор книги не могут быть пустыми");
+        throw invalid_argument("РќР°Р·РІР°РЅРёРµ Рё Р°РІС‚РѕСЂ РєРЅРёРіРё РЅРµ РјРѕРіСѓС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹РјРё");
     }
-    if (pub_year < 1452 || pub_year > 2026) {
-        throw invalid_argument("Некорректный год издания");
+    if (pub_year < 0 || pub_year > 2026) {
+        throw invalid_argument("РќРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ РіРѕРґ РёР·РґР°РЅРёСЏ");
     }
-    if (book_type != "учебник" && book_type != "методическое пособие" && book_type != "монография") {
-        throw invalid_argument("Тип книги должен быть: учебник, методическое пособие или монография");
+    if (book_type != "СѓС‡РµР±РЅРёРє" && book_type != "РјРµС‚РѕРґРёС‡РµСЃРєРѕРµ РїРѕСЃРѕР±РёРµ" && book_type != "РјРѕРЅРѕРіСЂР°С„РёСЏ") {
+        throw invalid_argument("РўРёРї РєРЅРёРіРё РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ: СѓС‡РµР±РЅРёРє, РјРµС‚РѕРґРёС‡РµСЃРєРѕРµ РїРѕСЃРѕР±РёРµ РёР»Рё РјРѕРЅРѕРіСЂР°С„РёСЏ");
     }
+
     title = book_title;
     author = book_author;
-    year = pub_year;  
+    year = pub_year;
     type = book_type;
     status = AVAILABLE;
     borrowed_by = -1;
-    days_left = 0;
-}
-
-string status_to_string(BookStatus status, int days_left) {
-    switch (status) {
-    case AVAILABLE:
-        return "Доступна";
-    case BORROWED:
-        if (days_left > 0) {
-            return "Выдана (осталось " + to_string(days_left) + " дн.)";
-        }
-        return "Выдана ПРОСРОЧЕНА!";
-    }
-    return "Неизвестно";
+    borrow_date = 0;
 }
 
 string Book::get_title() const { return title; }
@@ -43,52 +38,102 @@ int Book::get_year() const { return year; }
 string Book::get_type() const { return type; }
 BookStatus Book::get_status() const { return status; }
 int Book::get_borrowed_by() const { return borrowed_by; }
-int Book::get_days_left() const { return days_left; }
+time_t Book::get_borrow_date() const { return borrow_date; }
 
-void Book::borrow_book(int reader_id, int days) {
+int Book::get_days_left() const {
+    if (status != BORROWED || borrow_date == 0) return 0;
+
+    // Р”Р°С‚Р° РІРѕР·РІСЂР°С‚Р° = РґР°С‚Р° РІС‹РґР°С‡Рё + 14 РґРЅРµР№
+    time_t due_date = borrow_date + (MAX_BORROW_DAYS * 24 * 60 * 60);
+
+    // РЎРєРѕР»СЊРєРѕ СЃРµРєСѓРЅРґ РѕСЃС‚Р°Р»РѕСЃСЊ РґРѕ СЌС‚РѕР№ РґР°С‚С‹
+    time_t now = time(0);
+    double seconds_left = difftime(due_date, now);
+
+    // РџРµСЂРµРІРѕРґРёРј РІ РґРЅРё
+    return static_cast<int>(seconds_left / (24 * 60 * 60));
+}
+
+bool Book::is_overdue() const {
+    if (status != BORROWED) return false;
+    return get_days_left() < 0;
+}
+
+void Book::borrow_book(int reader_id) {
     if (status != AVAILABLE) {
-        throw logic_error("Книга недоступна для выдачи");
+        throw logic_error("РљРЅРёРіР° РЅРµРґРѕСЃС‚СѓРїРЅР° РґР»СЏ РІС‹РґР°С‡Рё");
     }
     status = BORROWED;
     borrowed_by = reader_id;
-    days_left = days;
+    borrow_date = time(0);   // в†ђ Р·Р°РїРѕРјРёРЅР°РµРј РґР°С‚Сѓ РІС‹РґР°С‡Рё
 }
 
 void Book::return_book() {
     if (status != BORROWED) {
-        throw logic_error("Книга не была выдана");
+        throw logic_error("РљРЅРёРіР° РЅРµ Р±С‹Р»Р° РІС‹РґР°РЅР°");
     }
     status = AVAILABLE;
     borrowed_by = -1;
-    days_left = 0;
-}
-
-void Book::decrease_days() {
-    if (status == BORROWED && days_left > 0) {
-        days_left--;
-    }
-}
-
-bool Book::is_overdue() const {
-    return (status == BORROWED && days_left <= 0);
+    borrow_date = 0;
 }
 
 string Book::short_line() const {
-    return title + " - " + author + " [" + type + "] - " + status_to_string(status, days_left);
+    string line = title + " - " + author + " [" + type + "] - ";
+
+    if (status == AVAILABLE) {
+        line += "Р”РѕСЃС‚СѓРїРЅР°";
+    }
+    else {
+        int days = get_days_left();
+        if (days > 0) {
+            line += "Р’С‹РґР°РЅР° (РѕСЃС‚Р°Р»РѕСЃСЊ " + to_string(days) + " РґРЅ.)";
+        }
+        else if (days == 0) {
+            line += "Р’С‹РґР°РЅР° (РїРѕСЃР»РµРґРЅРёР№ РґРµРЅСЊ)";
+        }
+        else {
+            line += "РџР РћРЎР РћР§Р•РќРђ РЅР° " + to_string(-days) + " РґРЅ.!";
+        }
+    }
+    return line;
 }
 
 void Book::display_info() const {
     cout << "-------------------------------------------" << endl;
-    cout << "КНИГА" << endl;
-    cout << "Название: " << title << endl;
-    cout << "Автор: " << author << endl;
-    cout << "Год издания: " << year << endl;
-    cout << "Тип: " << type << endl;
-    cout << "Статус: " << status_to_string(status, days_left) << endl;
+    cout << "РљРќРР“Рђ" << endl;
+    cout << "РќР°Р·РІР°РЅРёРµ: " << title << endl;
+    cout << "РђРІС‚РѕСЂ: " << author << endl;
+    cout << "Р“РѕРґ РёР·РґР°РЅРёСЏ: " << year << endl;
+    cout << "РўРёРї: " << type << endl;
+    cout << "РЎС‚Р°С‚СѓСЃ: " << status_to_string(status) << endl;
+
     if (status == BORROWED) {
-        cout << "Выдана читателю ID: " << borrowed_by << endl;
-        if (is_overdue()) {
-            cout << "[ВНИМАНИЕ] КНИГА ПРОСРОЧЕНА!" << endl;
+        cout << "Р’С‹РґР°РЅР° С‡РёС‚Р°С‚РµР»СЋ ID: " << borrowed_by << endl;
+
+        // Р¤РѕСЂРјР°С‚РёСЂСѓРµРј РґР°С‚Сѓ РІС‹РґР°С‡Рё
+        tm ltm;
+        localtime_s(&ltm, &borrow_date);
+
+        char buffer[11];
+        strftime(buffer, 11, "%d.%m.%Y", &ltm);
+        cout << "Р”Р°С‚Р° РІС‹РґР°С‡Рё: " << buffer << endl;
+
+        // РЎСЂРѕРє РІРѕР·РІСЂР°С‚Р°
+        time_t due = borrow_date + (MAX_BORROW_DAYS * 24 * 60 * 60);
+        localtime_s(&ltm, &due);
+        strftime(buffer, 11, "%d.%m.%Y", &ltm);
+        cout << "РЎСЂРѕРє РІРѕР·РІСЂР°С‚Р°: " << buffer << endl;
+
+        // РћСЃС‚Р°Р»РѕСЃСЊ / РїСЂРѕСЃСЂРѕС‡РµРЅРѕ
+        int days = get_days_left();
+        if (days > 0) {
+            cout << "РћСЃС‚Р°Р»РѕСЃСЊ РґРЅРµР№: " << days << endl;
+        }
+        else if (days == 0) {
+            cout << "РџРѕСЃР»РµРґРЅРёР№ РґРµРЅСЊ РІРѕР·РІСЂР°С‚Р°!" << endl;
+        }
+        else {
+            cout << "[Р’РќРРњРђРќРР•] РџСЂРѕСЃСЂРѕС‡РµРЅР° РЅР° " << -days << " РґРЅ.!" << endl;
         }
     }
     cout << "-------------------------------------------" << endl;

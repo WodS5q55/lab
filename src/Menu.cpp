@@ -21,17 +21,15 @@ void show_menu(const Library& library) {
     cout << "9. Показать просроченные книги" << endl;
     cout << "10. Добавить книгу" << endl;
     cout << "11. Изменить ФИО читателя" << endl;
-    cout << "12. Удалить книгу" << endl; 
+    cout << "12. Удалить книгу" << endl;
     cout << "0. Выход" << endl;
-    cout << "-------------------------------------------" << endl;
-    cout << "Текущий день: " << library.get_day_counter() << endl;
     cout << "-------------------------------------------" << endl;
     cout << "Выберите действие: ";
 }
 
+
 void run_menu(Library& library) {
     int choice;
-
     do {
         show_menu(library);
         cin >> choice;

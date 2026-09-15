@@ -1,7 +1,8 @@
-#ifndef BOOK_H
+﻿#ifndef BOOK_H
 #define BOOK_H
 
 #include <string>
+#include <ctime>   // ← для time_t
 
 using namespace std;
 
@@ -10,7 +11,7 @@ enum BookStatus {
     BORROWED
 };
 
-string status_to_string(BookStatus status, int days_left);
+string status_to_string(BookStatus status);
 
 class Book {
 private:
@@ -20,7 +21,7 @@ private:
     string type;
     BookStatus status;
     int borrowed_by;
-    int days_left;
+    time_t borrow_date; 
 
 public:
     Book(string book_title, string book_author, int pub_year, string book_type);
@@ -31,12 +32,15 @@ public:
     string get_type() const;
     BookStatus get_status() const;
     int get_borrowed_by() const;
-    int get_days_left() const;
 
-    void borrow_book(int reader_id, int days = 14);
+
+    time_t get_borrow_date() const;
+    int get_days_left() const;     
+    bool is_overdue() const;        
+
+    void borrow_book(int reader_id);  
     void return_book();
-    void decrease_days();
-    bool is_overdue() const;
+
     string short_line() const;
     void display_info() const;
 };

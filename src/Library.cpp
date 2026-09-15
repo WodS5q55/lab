@@ -147,7 +147,7 @@ void Library::display_all_books() const {
     for (const auto& book : books) {
         cout << "* " << book.get_title() << " (" << book.get_author() << ", "
             << book.get_year() << " ã.) [" << book.get_type() << "] - "
-            << status_to_string(book.get_status(), book.get_days_left()) << endl;
+            << status_to_string(book.get_status()) << endl;
     }
     cout << "-------------------------------------------" << endl;
 }
@@ -210,7 +210,7 @@ void Library::print_book_line(const Book& book, bool with_author) const {
     else {
         cout << " (" << book.get_year() << " ã.) [" << book.get_type() << "]";
     }
-    cout << " - " << status_to_string(book.get_status(), book.get_days_left()) << endl;
+    cout << " - " << status_to_string(book.get_status()) << endl;
 }
 
 int Library::get_book_count() const { return books.size(); }
