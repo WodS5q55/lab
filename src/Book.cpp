@@ -16,7 +16,7 @@ Book::Book(string book_title, string book_author, int pub_year, string book_type
     }
     title = book_title;
     author = book_author;
-    year = pub_year;
+    year = pub_year;  
     type = book_type;
     status = AVAILABLE;
     borrowed_by = -1;

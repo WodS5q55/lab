@@ -147,7 +147,7 @@ void run_menu(Library& library) {
                 } while (author.empty() || is_blank(author));
 
                 do {
-                    cout << "¬ведите год издани€ (0-2026): ";
+                    cout << "¬ведите год издани€ (1452-2026): ";
                     cin >> year;
                     if (cin.fail()) {
                         clear_input();

@@ -44,7 +44,7 @@ void Library::add_book(const Book& book) {
         throw invalid_argument("Автор книги не может быть пустым");
     }
     if (book.get_year() < 0 || book.get_year() > 2026) {
-        throw invalid_argument("Год издания должен быть от 0 до 2026");
+        throw invalid_argument("Год издания должен быть от 1452 до 2026");
     }
     string type = book.get_type();
     if (type != "учебник" && type != "методическое пособие" && type != "монография") {
@@ -119,16 +119,12 @@ Reader* Library::find_reader_by_id(int id) {
 }
 
 void Library::borrow_book(Book* book, Reader* reader) {
-    try {
         book->borrow_book(reader->get_id());
         cout << "[OK] Книга \"" << book->get_title() << "\" выдана студенту "
             << reader->get_name() << " (ID: " << reader->get_id() << ")" << endl;
         cout << "     Срок возврата: через 14 дней" << endl;
     }
-    catch (const exception& e) {
-        throw runtime_error(string("Ошибка выдачи: ") + e.what());
-    }
-}
+
 
 void Library::return_book(Book* book) {
     try {
