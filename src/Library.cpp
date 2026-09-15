@@ -31,9 +31,6 @@ Library::Library() {
     readers.push_back(Reader("Наталья Морозова", "+375875596214"));
     readers.push_back(Reader("Павел Козлов", "+375859967546"));
 
-    books[2].borrow_book(readers[0].get_id(), 14);
-    books[6].borrow_book(readers[1].get_id(), 1);
-
 }
 
 void Library::add_book(const Book& book) {
