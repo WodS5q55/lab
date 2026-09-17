@@ -35,7 +35,7 @@ Library::Library() {
 
 }
 
-int Library::find_book_index(Book* book) const {
+int Library::find_book_index(const Book* book) const {
     for (size_t i = 0; i < books.size(); i++) {
         if (&books[i] == book) {
             return static_cast<int>(i);
@@ -44,25 +44,28 @@ int Library::find_book_index(Book* book) const {
     return -1;
 }
 
-int Library::get_days_left(Book* book) const {
+int Library::get_days_left(const Book* book) const {
     int idx = find_book_index(book);
     if (idx == -1) return 0;
     if (borrow_dates[idx] == 0) return 0;
 
-    time_t due_date = borrow_dates[idx] + (MAX_BORROW_DAYS * 24 * 60 * 60);
-
+    time_t borrow = borrow_dates[idx];
     time_t now = time(0);
-    double seconds_left = difftime(due_date, now);
 
-    return static_cast<int>(seconds_left / (24 * 60 * 60));
+    int borrow_days = static_cast<int>(borrow / (24 * 60 * 60));
+    int now_days = static_cast<int>(now / (24 * 60 * 60));
+
+    int days_passed = now_days - borrow_days;
+
+    return MAX_BORROW_DAYS - days_passed;
 }
 
-bool Library::is_overdue(Book* book) const {
+bool Library::is_overdue(const Book* book) const {
     if (book->get_status() != BORROWED) return false;
     return get_days_left(book) < 0;
 }
 
-time_t Library::get_borrow_date(Book* book) const {
+time_t Library::get_borrow_date(const Book* book) const {
     int idx = find_book_index(book);
     return (idx != -1) ? borrow_dates[idx] : 0;
 }
@@ -75,7 +78,7 @@ void Library::add_book(const Book& book) {
         throw invalid_argument("Автор книги не может быть пустым");
     }
     if (book.get_year() < 1452 || book.get_year() > 2026) {
-        throw invalid_argument("Год издания должен быть от 0 до 2026");
+        throw invalid_argument("Год издания должен быть от 1452 до 2026");
     }
     string type = book.get_type();
     if (type != "учебник" && type != "методическое пособие" && type != "монография") {
@@ -87,7 +90,7 @@ void Library::add_book(const Book& book) {
         }
     }
     books.push_back(book);
-    borrow_dates.push_back(0); 
+    borrow_dates.push_back(0);
     cout << "[OK] Книга \"" << book.get_title() << "\" добавлена в библиотеку!" << endl;
 }
 
@@ -109,7 +112,7 @@ void Library::remove_book(Book* book) {
     for (size_t i = 0; i < books.size(); i++) {
         if (&books[i] == book) {
             books.erase(books.begin() + i);
-            borrow_dates.erase(borrow_dates.begin() + i); 
+            borrow_dates.erase(borrow_dates.begin() + i);
             cout << "[OK] Книга \"" << book->get_title() << "\" удалена из библиотеки!" << endl;
             return;
         }
@@ -159,11 +162,9 @@ Reader* Library::find_reader_by_id(int id) {
     return nullptr;
 }
 
-
 void Library::borrow_book(Book* book, Reader* reader) {
     try {
         book->borrow_book(reader->get_id());
-
 
         int idx = find_book_index(book);
         if (idx == -1) {
@@ -217,23 +218,15 @@ void Library::display_all_books() const {
             cout << "Доступна";
         }
         else {
-            if (borrow_dates[i] != 0) {
-                time_t due_date = borrow_dates[i] + (MAX_BORROW_DAYS * 24 * 60 * 60);
-                time_t now = time(0);
-                int days = static_cast<int>(difftime(due_date, now) / (24 * 60 * 60));
-
-                if (days > 0) {
-                    cout << "Выдана (осталось " << days << " дн.)";
-                }
-                else if (days == 0) {
-                    cout << "Выдана (последний день)";
-                }
-                else {
-                    cout << "ПРОСРОЧЕНА на " << -days << " дн.!";
-                }
+            int days = get_days_left(&books[i]);
+            if (days > 0) {
+                cout << "Выдана (осталось " << days << " дн.)";
+            }
+            else if (days == 0) {
+                cout << "Выдана (последний день)";
             }
             else {
-                cout << "Выдана";
+                cout << "ПРОСРОЧЕНА на " << -days << " дн.!";
             }
         }
         cout << endl;
@@ -258,10 +251,7 @@ void Library::display_overdue_books() const {
     bool has_overdue = false;
     for (size_t i = 0; i < books.size(); i++) {
         if (books[i].get_status() == BORROWED && borrow_dates[i] != 0) {
-            time_t due_date = borrow_dates[i] + (MAX_BORROW_DAYS * 24 * 60 * 60);
-            time_t now = time(0);
-            int days = static_cast<int>(difftime(due_date, now) / (24 * 60 * 60));
-
+            int days = get_days_left(&books[i]);
             if (days < 0) {
                 cout << "* " << books[i].get_title()
                     << " (" << books[i].get_author() << ")" << endl;
@@ -290,11 +280,6 @@ void Library::display_book_info(Book* book) {
         char buffer[11];
         strftime(buffer, 11, "%d.%m.%Y", &ltm);
         cout << "Дата выдачи: " << buffer << endl;
-
-        time_t due = borrow_dates[idx] + (MAX_BORROW_DAYS * 24 * 60 * 60);
-        localtime_s(&ltm, &due);
-        strftime(buffer, 11, "%d.%m.%Y", &ltm);
-        cout << "Срок возврата: " << buffer << endl;
 
         int days = get_days_left(book);
         if (days > 0) {

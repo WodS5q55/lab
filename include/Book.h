@@ -35,7 +35,7 @@ public:
     void return_book();
 
     string short_line() const;
-    void display_info() const;       
+    void display_info() const;
 };
 
 #endif

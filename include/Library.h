@@ -14,9 +14,11 @@ private:
     vector<Book> books;
     vector<Reader> readers;
 
-    vector<time_t> borrow_dates;   
+    vector<time_t> borrow_dates;
 
-    int find_book_index(Book* book) const;
+    static const int MAX_BORROW_DAYS = 14;
+
+    int find_book_index(const Book* book) const;
     void print_book_line(const Book& book, bool with_author) const;
 
 public:
@@ -38,9 +40,9 @@ public:
     void borrow_book(Book* book, Reader* reader);
     void return_book(Book* book);
 
-    int get_days_left(Book* book) const;
-    bool is_overdue(Book* book) const;
-    time_t get_borrow_date(Book* book) const;
+    int get_days_left(const Book* book) const; 
+    bool is_overdue(const Book* book) const;     
+    time_t get_borrow_date(const Book* book) const;
 
     void display_all_books() const;
     void display_all_readers() const;
