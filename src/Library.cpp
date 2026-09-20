@@ -61,7 +61,7 @@ int Library::get_days_left(const Book* book) const {
 }
 
 bool Library::is_overdue(const Book* book) const {
-    if (book->get_status() != BORROWED) return false;
+    if (book->is_available()) return false;
     return get_days_left(book) < 0;
 }
 
@@ -105,7 +105,7 @@ void Library::add_reader(const Reader& reader) {
 }
 
 void Library::remove_book(Book* book) {
-    if (book->get_status() == BORROWED) {
+    if (book->is_borrowed()) {
         throw logic_error("Нельзя удалить книгу, которая выдана читателю");
     }
 
@@ -136,7 +136,7 @@ Book* Library::find_book_by_title(const string& title) {
 vector<Book*> Library::find_available_books() {
     vector<Book*> result;
     for (auto& book : books) {
-        if (book.get_status() == AVAILABLE) {
+        if (book.is_available()) {
             result.push_back(&book);
         }
     }
@@ -146,7 +146,7 @@ vector<Book*> Library::find_available_books() {
 vector<Book*> Library::find_borrowed_books() {
     vector<Book*> result;
     for (auto& book : books) {
-        if (book.get_status() == BORROWED) {
+        if (book.is_borrowed()) {
             result.push_back(&book);
         }
     }
@@ -214,7 +214,7 @@ void Library::display_all_books() const {
             << " (" << books[i].get_author() << ", " << books[i].get_year() << " г.) "
             << "[" << books[i].get_type() << "] - ";
 
-        if (books[i].get_status() == AVAILABLE) {
+        if (books[i].is_available()) {
             cout << "Доступна";
         }
         else {
@@ -250,7 +250,7 @@ void Library::display_overdue_books() const {
 
     bool has_overdue = false;
     for (size_t i = 0; i < books.size(); i++) {
-        if (books[i].get_status() == BORROWED && borrow_dates[i] != 0) {
+        if (books[i].is_borrowed() && borrow_dates[i] != 0) {
             int days = get_days_left(&books[i]);
             if (days < 0) {
                 cout << "* " << books[i].get_title()
@@ -274,7 +274,7 @@ void Library::display_book_info(Book* book) {
     int idx = find_book_index(book);
     if (idx == -1) return;
 
-    if (book->get_status() == BORROWED && borrow_dates[idx] != 0) {
+    if (book->is_borrowed() && borrow_dates[idx] != 0) {
         tm ltm;
         localtime_s(&ltm, &borrow_dates[idx]);
         char buffer[11];
@@ -321,7 +321,7 @@ void Library::print_book_line(const Book& book, bool with_author) const {
     else {
         cout << " (" << book.get_year() << " г.) [" << book.get_type() << "]";
     }
-    cout << " - " << status_to_string(book.get_status()) << endl;
+    cout << " - " << (book.is_available() ? "Доступна" : "Выдана") << endl;
 }
 
 int Library::get_book_count() const { return books.size(); }

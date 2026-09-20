@@ -4,10 +4,6 @@
 
 using namespace std;
 
-string status_to_string(BookStatus status) {
-    return (status == AVAILABLE) ? "Доступна" : "Выдана";
-}
-
 Book::Book(string book_title, string book_author, int pub_year, string book_type) {
     if (book_title.empty() || book_author.empty()) {
         throw invalid_argument("Название и автор книги не могут быть пустыми");
@@ -23,7 +19,6 @@ Book::Book(string book_title, string book_author, int pub_year, string book_type
     author = book_author;
     year = pub_year;
     type = book_type;
-    status = AVAILABLE;
     borrowed_by = -1;
 }
 
@@ -31,27 +26,32 @@ string Book::get_title() const { return title; }
 string Book::get_author() const { return author; }
 int Book::get_year() const { return year; }
 string Book::get_type() const { return type; }
-BookStatus Book::get_status() const { return status; }
 int Book::get_borrowed_by() const { return borrowed_by; }
 
+bool Book::is_available() const {
+    return borrowed_by == -1;
+}
+
+bool Book::is_borrowed() const {
+    return borrowed_by != -1;
+}
+
 void Book::borrow_book(int reader_id) {
-    if (status != AVAILABLE) {
+    if (is_borrowed()) {
         throw logic_error("Книга недоступна для выдачи");
     }
-    status = BORROWED;
     borrowed_by = reader_id;
 }
 
 void Book::return_book() {
-    if (status != BORROWED) {
+    if (is_available()) {
         throw logic_error("Книга не была выдана");
     }
-    status = AVAILABLE;
     borrowed_by = -1;
 }
 
 string Book::short_line() const {
-    return title + " - " + author + " [" + type + "] - " + status_to_string(status);
+    return title + " - " + author + " [" + type + "] - " + (is_available() ? "Доступна" : "Выдана");
 }
 
 void Book::display_info() const {
@@ -61,6 +61,9 @@ void Book::display_info() const {
     cout << "Автор: " << author << endl;
     cout << "Год издания: " << year << endl;
     cout << "Тип: " << type << endl;
-    cout << "Статус: " << status_to_string(status) << endl;
+    cout << "Статус: " << (is_available() ? "Доступна" : "Выдана") << endl;
+    if (is_borrowed()) {
+        cout << "Выдана читателю ID: " << borrowed_by << endl;
+    }
     cout << "-------------------------------------------" << endl;
 }

@@ -5,21 +5,13 @@
 
 using namespace std;
 
-enum BookStatus {
-    AVAILABLE,
-    BORROWED
-};
-
-string status_to_string(BookStatus status);
-
 class Book {
 private:
     string title;
     string author;
     int year;
     string type;
-    BookStatus status;
-    int borrowed_by;
+    int borrowed_by;  
 
 public:
     Book(string book_title, string book_author, int pub_year, string book_type);
@@ -28,8 +20,11 @@ public:
     string get_author() const;
     int get_year() const;
     string get_type() const;
-    BookStatus get_status() const;
     int get_borrowed_by() const;
+
+    // Проверка состояния
+    bool is_available() const;   
+    bool is_borrowed() const;    
 
     void borrow_book(int reader_id);
     void return_book();
