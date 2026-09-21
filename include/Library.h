@@ -13,7 +13,6 @@ class Library {
 private:
     vector<Book> books;
     vector<Reader> readers;
-
     vector<time_t> borrow_dates;
 
     static const int MAX_BORROW_DAYS = 14;
@@ -31,17 +30,17 @@ public:
     const vector<Book>& get_books() const;
     const vector<Reader>& get_readers() const;
     vector<Book>& get_books_mutable();
+    vector<Reader>& get_readers_mutable();   
 
     Book* find_book_by_title(const string& title);
     vector<Book*> find_available_books();
     vector<Book*> find_borrowed_books();
-    Reader* find_reader_by_id(int id);
 
     void borrow_book(Book* book, Reader* reader);
     void return_book(Book* book);
 
-    int get_days_left(const Book* book) const; 
-    bool is_overdue(const Book* book) const;     
+    int get_days_left(const Book* book) const;
+    bool is_overdue(const Book* book) const;
     time_t get_borrow_date(const Book* book) const;
 
     void display_all_books() const;

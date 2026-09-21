@@ -1,4 +1,5 @@
 ﻿#include "Book.h"
+#include "Reader.h" 
 #include <iostream>
 #include <stdexcept>
 
@@ -19,39 +20,43 @@ Book::Book(string book_title, string book_author, int pub_year, string book_type
     author = book_author;
     year = pub_year;
     type = book_type;
-    borrowed_by = -1;
+    borrowed_by = nullptr;  
 }
 
 string Book::get_title() const { return title; }
 string Book::get_author() const { return author; }
 int Book::get_year() const { return year; }
 string Book::get_type() const { return type; }
-int Book::get_borrowed_by() const { return borrowed_by; }
+
+Reader* Book::get_borrowed_by() const {
+    return borrowed_by;
+}
 
 bool Book::is_available() const {
-    return borrowed_by == -1;
+    return borrowed_by == nullptr;
 }
 
 bool Book::is_borrowed() const {
-    return borrowed_by != -1;
+    return borrowed_by != nullptr;
 }
 
-void Book::borrow_book(int reader_id) {
+void Book::borrow_book(Reader* reader) {
     if (is_borrowed()) {
         throw logic_error("Книга недоступна для выдачи");
     }
-    borrowed_by = reader_id;
+    borrowed_by = reader;  
 }
-  
+
 void Book::return_book() {
     if (is_available()) {
         throw logic_error("Книга не была выдана");
     }
-    borrowed_by = -1;
+    borrowed_by = nullptr;
 }
 
 string Book::short_line() const {
-    return title + " - " + author + " [" + type + "] - " + (is_available() ? "Доступна" : "Выдана");
+    string status = is_available() ? "Доступна" : "Выдана";
+    return title + " - " + author + " [" + type + "] - " + status;
 }
 
 void Book::display_info() const {
@@ -62,8 +67,10 @@ void Book::display_info() const {
     cout << "Год издания: " << year << endl;
     cout << "Тип: " << type << endl;
     cout << "Статус: " << (is_available() ? "Доступна" : "Выдана") << endl;
+
     if (is_borrowed()) {
-        cout << "Выдана читателю ID: " << borrowed_by << endl;
+        cout << "Выдана читателю: " << borrowed_by->get_name()
+            << " (ID: " << borrowed_by->get_id() << ")" << endl;  
     }
     cout << "-------------------------------------------" << endl;
 }

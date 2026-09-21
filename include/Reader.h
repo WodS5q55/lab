@@ -9,18 +9,17 @@ class Reader {
 private:
     string full_name;
     string phone;
-    int reader_id;
-    static int next_id;
+    int reader_id;             
+    static int next_id;          
 
 public:
     Reader(string name, string phone_num);
 
     string get_name() const;
     string get_phone() const;
-    int get_id() const;
+    int get_id() const;          
 
     void set_name(string new_name);
-
     void set_phone(string new_phone);
 
     void display_info() const;

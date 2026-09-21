@@ -12,19 +12,18 @@ Reader::Reader(string name, string phone_num) {
     }
     full_name = name;
     phone = phone_num;
-    reader_id = next_id++;
+    reader_id = next_id++;  
 }
 
-string Reader::get_name() const {
-    return full_name;
-}
+string Reader::get_name() const { return full_name; }
+string Reader::get_phone() const { return phone; }
+int Reader::get_id() const { return reader_id; }
 
-string Reader::get_phone() const {
-    return phone;
-}
-
-int Reader::get_id() const {
-    return reader_id;
+void Reader::set_name(string new_name) {
+    if (new_name.empty()) {
+        throw invalid_argument("Имя читателя не может быть пустым");
+    }
+    full_name = new_name;
 }
 
 void Reader::set_phone(string new_phone) {
@@ -34,17 +33,10 @@ void Reader::set_phone(string new_phone) {
     phone = new_phone;
 }
 
-void Reader::set_name(string new_name) {
-    if (new_name.empty()) {
-        throw invalid_argument("Имя читателя не может быть пустым");
-    }
-    full_name = new_name;
-}
-
 void Reader::display_info() const {
     cout << "-------------------------------------------" << endl;
     cout << "ЧИТАТЕЛЬ" << endl;
-    cout << "ID: " << reader_id << endl;
+    cout << "ID: " << reader_id << endl;   
     cout << "ФИО: " << full_name << endl;
     cout << "Телефон: " << phone << endl;
     cout << "-------------------------------------------" << endl;

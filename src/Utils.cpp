@@ -61,14 +61,14 @@ Book* select_book(vector<Book*>& candidates, const string& prompt) {
 
 Reader* select_reader(Library& library, const string& prompt) {
     vector<string> lines;
-    const vector<Reader>& readers = library.get_readers();
+    vector<Reader>& readers = library.get_readers_mutable(); 
     for (const auto& reader : readers) {
         lines.push_back(reader.get_name() + " (ID: " + to_string(reader.get_id())
             + ", тел.: " + reader.get_phone() + ")");
     }
     int idx = select_from_list(lines, prompt);
     if (idx < 0) return nullptr;
-    return library.find_reader_by_id(readers[static_cast<size_t>(idx)].get_id());
+    return &readers[idx];  
 }
 
 Book* select_any_book(Library& library, const string& prompt) {

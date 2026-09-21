@@ -123,6 +123,7 @@ void Library::remove_book(Book* book) {
 const vector<Book>& Library::get_books() const { return books; }
 const vector<Reader>& Library::get_readers() const { return readers; }
 vector<Book>& Library::get_books_mutable() { return books; }
+vector<Reader>& Library::get_readers_mutable() { return readers; }   
 
 Book* Library::find_book_by_title(const string& title) {
     for (auto& book : books) {
@@ -153,18 +154,9 @@ vector<Book*> Library::find_borrowed_books() {
     return result;
 }
 
-Reader* Library::find_reader_by_id(int id) {
-    for (auto& reader : readers) {
-        if (reader.get_id() == id) {
-            return &reader;
-        }
-    }
-    return nullptr;
-}
-
 void Library::borrow_book(Book* book, Reader* reader) {
     try {
-        book->borrow_book(reader->get_id());
+        book->borrow_book(reader);  
 
         int idx = find_book_index(book);
         if (idx == -1) {
@@ -173,7 +165,7 @@ void Library::borrow_book(Book* book, Reader* reader) {
         borrow_dates[idx] = time(0);
 
         cout << "[OK] Книга \"" << book->get_title() << "\" выдана студенту "
-            << reader->get_name() << " (ID: " << reader->get_id() << ")" << endl;
+            << reader->get_name() << " (ID: " << reader->get_id() << ")" << endl; 
         cout << "     Срок возврата: " << MAX_BORROW_DAYS << " дней" << endl;
     }
     catch (const exception& e) {
@@ -183,7 +175,7 @@ void Library::borrow_book(Book* book, Reader* reader) {
 
 void Library::return_book(Book* book) {
     try {
-        int reader_id = book->get_borrowed_by();
+        Reader* reader = book->get_borrowed_by(); 
         book->return_book();
 
         int idx = find_book_index(book);
@@ -192,11 +184,8 @@ void Library::return_book(Book* book) {
         }
 
         cout << "[OK] Книга \"" << book->get_title() << "\" возвращена в библиотеку";
-        if (reader_id != -1) {
-            Reader* reader = find_reader_by_id(reader_id);
-            if (reader) {
-                cout << " (читатель " << reader->get_name() << ")";
-            }
+        if (reader != nullptr) {
+            cout << " (читатель " << reader->get_name() << ")";
         }
         cout << endl;
     }
@@ -238,7 +227,7 @@ void Library::display_all_readers() const {
     cout << "\nСПИСОК ЧИТАТЕЛЕЙ (" << readers.size() << " чел.)" << endl;
     cout << "-------------------------------------------" << endl;
     for (const auto& reader : readers) {
-        cout << "ID " << reader.get_id() << ": " << reader.get_name()
+        cout << "ID " << reader.get_id() << ": " << reader.get_name()   
             << " (тел.: " << reader.get_phone() << ")" << endl;
     }
     cout << "-------------------------------------------" << endl;
@@ -256,7 +245,8 @@ void Library::display_overdue_books() const {
                 cout << "* " << books[i].get_title()
                     << " (" << books[i].get_author() << ")" << endl;
                 cout << "  Просрочена на " << -days << " дн." << endl;
-                cout << "  Выдана читателю ID: " << books[i].get_borrowed_by() << endl;
+                cout << "  Выдана читателю: " << books[i].get_borrowed_by()->get_name()
+                    << " (ID: " << books[i].get_borrowed_by()->get_id() << ")" << endl;   
                 has_overdue = true;
             }
         }
@@ -300,7 +290,7 @@ void Library::display_reader_info(Reader* reader) {
 
 void Library::change_reader_name(Reader* reader, string new_name) {
     for (const auto& r : readers) {
-        if (r.get_id() != reader->get_id() && r.get_name() == new_name) {
+        if (&r != reader && r.get_name() == new_name) {
             throw invalid_argument("Читатель с таким именем уже зарегистрирован");
         }
     }

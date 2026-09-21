@@ -5,13 +5,16 @@
 
 using namespace std;
 
+
+class Reader;
+
 class Book {
 private:
     string title;
     string author;
     int year;
     string type;
-    int borrowed_by;  
+    Reader* borrowed_by;  
 
 public:
     Book(string book_title, string book_author, int pub_year, string book_type);
@@ -20,12 +23,12 @@ public:
     string get_author() const;
     int get_year() const;
     string get_type() const;
-    int get_borrowed_by() const;
+    Reader* get_borrowed_by() const;  
 
-    bool is_available() const;   
-    bool is_borrowed() const;    
+    bool is_available() const;
+    bool is_borrowed() const;
 
-    void borrow_book(int reader_id);
+    void borrow_book(Reader* reader);  
     void return_book();
 
     string short_line() const;
