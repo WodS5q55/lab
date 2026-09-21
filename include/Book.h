@@ -22,7 +22,6 @@ public:
     string get_type() const;
     int get_borrowed_by() const;
 
-    // Проверка состояния
     bool is_available() const;   
     bool is_borrowed() const;    
 
