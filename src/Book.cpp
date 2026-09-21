@@ -42,7 +42,7 @@ void Book::borrow_book(int reader_id) {
     }
     borrowed_by = reader_id;
 }
-
+  
 void Book::return_book() {
     if (is_available()) {
         throw logic_error("Книга не была выдана");
