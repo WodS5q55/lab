@@ -16,12 +16,18 @@ private:
     vector<time_t> borrow_dates;
 
     static const int MAX_BORROW_DAYS = 14;
+    int next_book_id;
 
     int find_book_index(const Book* book) const;
     void print_book_line(const Book& book, bool with_author) const;
 
 public:
     Library();
+
+    Library& operator+=(const Book& book);
+    Library& operator-=(const Book& book);
+    Library& operator+=(const Reader& reader);
+    Library& operator-=(const Reader& reader);
 
     void add_book(const Book& book);
     void add_reader(const Reader& reader);
@@ -30,11 +36,12 @@ public:
     const vector<Book>& get_books() const;
     const vector<Reader>& get_readers() const;
     vector<Book>& get_books_mutable();
-    vector<Reader>& get_readers_mutable();   
+    vector<Reader>& get_readers_mutable();
 
     Book* find_book_by_title(const string& title);
     vector<Book*> find_available_books();
     vector<Book*> find_borrowed_books();
+    Reader* find_reader_by_id(int id);
 
     void borrow_book(Book* book, Reader* reader);
     void return_book(Book* book);
@@ -48,6 +55,8 @@ public:
     void display_overdue_books() const;
     void display_book_info(Book* book);
     void display_reader_info(Reader* reader);
+    void compare_two_books() const;
+    void compare_two_readers() const;
 
     void change_reader_name(Reader* reader, string new_name);
     void change_reader_phone(Reader* reader, string new_phone);

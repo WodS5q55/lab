@@ -22,14 +22,17 @@ void show_menu(const Library& library) {
     cout << "10. Добавить книгу" << endl;
     cout << "11. Изменить ФИО читателя" << endl;
     cout << "12. Удалить книгу" << endl;
+    cout << "13. Сравнить две книги" << endl;
+    cout << "14. Удалить читателя" << endl;
+    cout << "15. Сравнить двух читателей" << endl;
     cout << "0. Выход" << endl;
     cout << "-------------------------------------------" << endl;
     cout << "Выберите действие: ";
 }
 
-
 void run_menu(Library& library) {
     int choice;
+
     do {
         show_menu(library);
         cin >> choice;
@@ -40,23 +43,17 @@ void run_menu(Library& library) {
             continue;
         }
 
+        try {
             switch (choice) {
             case 1: {
-                string name, phone;
-                do {
-                    cout << "Введите ФИО читателя: ";
-                    clear_input();
-                    getline(cin, name);
-                    if (name.empty() || is_blank(name)) {
-                        cout << "[ОШИБКА] Имя не может быть пустым!" << endl;
-                    }
-                } while (name.empty() || is_blank(name));
+                cout << "\n--- РЕГИСТРАЦИЯ ЧИТАТЕЛЯ ---" << endl;
 
-                cout << "Введите номер телефона: ";
-                getline(cin, phone);
+                Reader new_reader("", "");
+                cin >> new_reader;
 
-                Reader reader(name, phone);
-                library.add_reader(reader);
+                cout << "\nСоздан: " << new_reader << endl;
+
+                library += new_reader;
                 break;
             }
             case 2: {
@@ -93,19 +90,19 @@ void run_menu(Library& library) {
                 library.display_all_readers();
                 break;
             case 6: {
-                Book* book = select_any_book(library, "Выберите книгу для просмотра информации:");
+                Book* book = select_any_book(library, "Выберите книгу:");
                 if (!book) break;
                 library.display_book_info(book);
                 break;
             }
             case 7: {
-                Reader* reader = select_reader(library, "Выберите читателя для просмотра информации:");
+                Reader* reader = select_reader(library, "Выберите читателя:");
                 if (!reader) break;
                 library.display_reader_info(reader);
                 break;
             }
             case 8: {
-                Reader* reader = select_reader(library, "Выберите читателя для изменения телефона:");
+                Reader* reader = select_reader(library, "Выберите читателя:");
                 if (!reader) break;
 
                 string phone;
@@ -118,80 +115,23 @@ void run_menu(Library& library) {
             case 9:
                 library.display_overdue_books();
                 break;
+
             case 10: {
                 cout << "\n--- ДОБАВЛЕНИЕ НОВОЙ КНИГИ ---" << endl;
 
-                string title, author;
-                int year;
-                string type;
-                int type_choice;
+                Book new_book(0, "", "", 0, "");
+                cin >> new_book;
 
-                do {
-                    cout << "Введите название книги: ";
-                    cin >> ws;
-                    getline(cin, title);
-                    if (title.empty() || is_blank(title)) {
-                        cout << "[ОШИБКА] Название не может быть пустым!" << endl;
-                    }
-                } while (title.empty() || is_blank(title));
+                int new_id = library.get_book_count() + 1;
+                Book final_book(new_id, new_book.get_title(), new_book.get_author(),
+                    new_book.get_year(), new_book.get_type());
 
-                do {
-                    cout << "Введите автора книги: ";
-                    cin >> ws;
-                    getline(cin, author);
-                    if (author.empty() || is_blank(author)) {
-                        cout << "[ОШИБКА] Автор не может быть пустым!" << endl;
-                    }
-                } while (author.empty() || is_blank(author));
-
-                do {
-                    cout << "Введите год издания (1452-2026): ";
-                    cin >> year;
-                    if (cin.fail()) {
-                        clear_input();
-                        cout << "[ОШИБКА] Введите число!" << endl;
-                        continue;
-                    }
-                    if (year < 1452 || year > 2026) {
-                        cout << "[ОШИБКА] Год должен быть от 1452 до 2026!" << endl;
-                    }
-                } while (year < 1452 || year > 2026);
-                clear_input();
-
-                do {
-                    cout << "Выберите тип книги:" << endl;
-                    cout << "  1. учебник" << endl;
-                    cout << "  2. методическое пособие" << endl;
-                    cout << "  3. монография" << endl;
-                    cout << "Введите номер (1-3): ";
-                    cin >> type_choice;
-                    if (cin.fail()) {
-                        clear_input();
-                        cout << "[ОШИБКА] Введите число!" << endl;
-                        continue;
-                    }
-                    if (type_choice < 1 || type_choice > 3) {
-                        cout << "[ОШИБКА] Введите 1, 2 или 3!" << endl;
-                    }
-                } while (type_choice < 1 || type_choice > 3);
-                clear_input();
-
-                if (type_choice == 1) {
-                    type = "учебник";
-                }
-                else if (type_choice == 2) {
-                    type = "методическое пособие";
-                }
-                else {
-                    type = "монография";
-                }
-
-                Book new_book(title, author, year, type);
-                library.add_book(new_book);
+                library += final_book;
                 break;
             }
+
             case 11: {
-                Reader* reader = select_reader(library, "Выберите читателя для изменения ФИО:");
+                Reader* reader = select_reader(library, "Выберите читателя:");
                 if (!reader) break;
 
                 string new_name;
@@ -207,31 +147,59 @@ void run_menu(Library& library) {
                 library.change_reader_name(reader, new_name);
                 break;
             }
-            case 12: { 
+
+            case 12: {
                 Book* book = select_any_book(library, "Выберите книгу для удаления:");
                 if (!book) break;
 
+                if (book->is_borrowed()) {
+                    cout << "[ОШИБКА] Нельзя удалить книгу \"" << book->get_title()
+                        << "\" — она выдана читателю!" << endl;
+                    break;
+                }
+
                 char confirm;
-                cout << "Вы уверены, что хотите удалить книгу \""
-                    << book->get_title() << "\"? (y/n): ";
+                cout << "Вы уверены? (y/n): ";
                 cin >> confirm;
                 clear_input();
 
                 if (confirm == 'y' || confirm == 'Y') {
-                    library.remove_book(book);
+                    library -= *book;
                 }
                 else {
                     cout << "Удаление отменено." << endl;
                 }
                 break;
             }
+
+            case 13:
+                library.compare_two_books();
+                break;
+
+            case 14: {
+                Reader* reader = select_reader(library, "Выберите читателя для удаления:");
+                if (!reader) break;
+
+                library -= *reader;
+                break;
+            }
+
+            case 15:
+                library.compare_two_readers();
+                break;
+
             case 0:
                 cout << "\nДо свидания!" << endl;
                 break;
+
             default:
                 cout << "[ОШИБКА] Неверный выбор. Попробуйте снова." << endl;
             }
         }
+        catch (const exception& e) {
+            cout << "[ОШИБКА] " << e.what() << endl;
+            clear_input();
+        }
 
-    while (choice != 0);
+    } while (choice != 0);
 }

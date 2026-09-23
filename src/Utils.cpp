@@ -2,21 +2,20 @@
 #include "Library.h"
 #include <iostream>
 #include <limits>
+#include <cctype>
 
 using namespace std;
+
+bool is_blank(const string& str) {
+    for (char c : str) {
+        if (!isspace(c)) return false;
+    }
+    return true;
+}
 
 void clear_input() {
     cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
-}
-
-bool is_blank(const string& str) {
-    for (char c : str) {
-        if (!isspace(c)) {
-            return false;
-        }
-    }
-    return true;
 }
 
 int select_from_list(const vector<string>& items, const string& prompt) {
@@ -61,14 +60,14 @@ Book* select_book(vector<Book*>& candidates, const string& prompt) {
 
 Reader* select_reader(Library& library, const string& prompt) {
     vector<string> lines;
-    vector<Reader>& readers = library.get_readers_mutable(); 
+    vector<Reader>& readers = library.get_readers_mutable();
     for (const auto& reader : readers) {
         lines.push_back(reader.get_name() + " (ID: " + to_string(reader.get_id())
             + ", тел.: " + reader.get_phone() + ")");
     }
     int idx = select_from_list(lines, prompt);
     if (idx < 0) return nullptr;
-    return &readers[idx];  
+    return &readers[static_cast<size_t>(idx)];
 }
 
 Book* select_any_book(Library& library, const string& prompt) {
