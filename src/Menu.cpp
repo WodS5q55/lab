@@ -10,21 +10,19 @@ void show_menu(const Library& library) {
     cout << "\n===========================================" << endl;
     cout << "       УНИВЕРСИТЕТСКАЯ БИБЛИОТЕКА" << endl;
     cout << "===========================================" << endl;
-    cout << "1. Зарегистрировать читателя" << endl;
+    cout << "1. Зарегистрировать читателя(>>, +=)" << endl;
     cout << "2. Выдать книгу" << endl;
     cout << "3. Вернуть книгу" << endl;
     cout << "4. Показать все книги" << endl;
     cout << "5. Показать всех читателей" << endl;
-    cout << "6. Показать информацию о книге" << endl;
-    cout << "7. Показать информацию о читателе" << endl;
-    cout << "8. Изменить телефон читателя" << endl;
-    cout << "9. Показать просроченные книги" << endl;
-    cout << "10. Добавить книгу" << endl;
-    cout << "11. Изменить ФИО читателя" << endl;
-    cout << "12. Удалить книгу" << endl;
-    cout << "13. Сравнить две книги" << endl;
-    cout << "14. Удалить читателя" << endl;
-    cout << "15. Сравнить двух читателей" << endl;
+    cout << "6. Показать информацию о книге(<<)" << endl;
+    cout << "7. Показать информацию о читателе(<<)" << endl;
+    cout << "8. Показать просроченные книги" << endl;
+    cout << "9. Добавить книгу(>>, +=)" << endl;
+    cout << "10. Удалить книгу(-=)" << endl;
+    cout << "11. Сравнить две книги(==, !=, <, >, <=, >=)" << endl;
+    cout << "12. Удалить читателя(-=)" << endl;
+    cout << "13. Сравнить двух читателей(<, ==, !=)" << endl;
     cout << "0. Выход" << endl;
     cout << "-------------------------------------------" << endl;
     cout << "Выберите действие: ";
@@ -46,9 +44,11 @@ void run_menu(Library& library) {
         try {
             switch (choice) {
             case 1: {
-                cout << "\n--- РЕГИСТРАЦИЯ ЧИТАТЕЛЯ ---" << endl;
+                cout << "\n--- РЕГИСТРАЦИЯ ЧИТАТЕЛЯ (оператор >>) ---" << endl;
+                clear_input();
 
-                Reader new_reader("", "");
+                Reader new_reader;
+
                 cin >> new_reader;
 
                 cout << "\nСоздан: " << new_reader << endl;
@@ -101,25 +101,15 @@ void run_menu(Library& library) {
                 library.display_reader_info(reader);
                 break;
             }
-            case 8: {
-                Reader* reader = select_reader(library, "Выберите читателя:");
-                if (!reader) break;
-
-                string phone;
-                cout << "Введите новый номер телефона: ";
-                clear_input();
-                getline(cin, phone);
-                library.change_reader_phone(reader, phone);
-                break;
-            }
-            case 9:
+            case 8:
                 library.display_overdue_books();
                 break;
 
-            case 10: {
-                cout << "\n--- ДОБАВЛЕНИЕ НОВОЙ КНИГИ ---" << endl;
+            case 9: {
+                cout << "\n--- ДОБАВЛЕНИЕ НОВОЙ КНИГИ (оператор >>) ---" << endl;
+                clear_input();
 
-                Book new_book(0, "", "", 0, "");
+                Book new_book;
                 cin >> new_book;
 
                 int new_id = library.get_book_count() + 1;
@@ -130,25 +120,7 @@ void run_menu(Library& library) {
                 break;
             }
 
-            case 11: {
-                Reader* reader = select_reader(library, "Выберите читателя:");
-                if (!reader) break;
-
-                string new_name;
-                do {
-                    cout << "Введите новое ФИО: ";
-                    clear_input();
-                    getline(cin, new_name);
-                    if (new_name.empty() || is_blank(new_name)) {
-                        cout << "[ОШИБКА] ФИО не может быть пустым!" << endl;
-                    }
-                } while (new_name.empty() || is_blank(new_name));
-
-                library.change_reader_name(reader, new_name);
-                break;
-            }
-
-            case 12: {
+            case 10: {
                 Book* book = select_any_book(library, "Выберите книгу для удаления:");
                 if (!book) break;
 
@@ -172,11 +144,11 @@ void run_menu(Library& library) {
                 break;
             }
 
-            case 13:
+            case 11:
                 library.compare_two_books();
                 break;
 
-            case 14: {
+            case 12: {
                 Reader* reader = select_reader(library, "Выберите читателя для удаления:");
                 if (!reader) break;
 
@@ -184,7 +156,7 @@ void run_menu(Library& library) {
                 break;
             }
 
-            case 15:
+            case 13:
                 library.compare_two_readers();
                 break;
 

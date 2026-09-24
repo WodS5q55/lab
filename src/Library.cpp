@@ -296,6 +296,8 @@ void Library::display_overdue_books() const {
 }
 
 void Library::display_book_info(Book* book) {
+    cout << *book << endl;
+
     book->display_info();
 
     int idx = find_book_index(book);
@@ -322,6 +324,7 @@ void Library::display_book_info(Book* book) {
 }
 
 void Library::display_reader_info(Reader* reader) {
+    cout << *reader << endl;
     reader->display_info();
 }
 
@@ -367,21 +370,6 @@ void Library::compare_two_books() const {
     cout << "b1 <= b2?             " << (*b1 <= *b2 ? "ДА" : "НЕТ") << endl;
     cout << "b1 >= b2?             " << (*b1 >= *b2 ? "ДА" : "НЕТ") << endl;
 
-    cout << "\n--- ПОЯСНЕНИЕ ---" << endl;
-    if (*b1 == *b2) {
-        cout << "Книги одинаковые (по ID)." << endl;
-    }
-    else if (*b1 < *b2) {
-        cout << "\"" << b1->get_title() << "\" издана раньше, чем \""
-            << b2->get_title() << "\"" << endl;
-    }
-    else if (*b1 > *b2) {
-        cout << "\"" << b1->get_title() << "\" издана позже, чем \""
-            << b2->get_title() << "\"" << endl;
-    }
-    else {
-        cout << "Книги изданы в одном году." << endl;
-    }
 }
 
 void Library::compare_two_readers() const {

@@ -5,6 +5,15 @@
 
 using namespace std;
 
+Book::Book() {
+    id = 0;
+    title = "";
+    author = "";
+    year = 0;
+    type = "";
+    borrowed_by = nullptr;
+}
+
 Book::Book(int book_id, string book_title, string book_author, int pub_year, string book_type) {
     if (book_title.empty() || book_author.empty()) {
         throw invalid_argument("Название и автор книги не могут быть пустыми");
@@ -102,9 +111,9 @@ ostream& operator<<(ostream& os, const Book& book) {
 istream& operator>>(istream& is, Book& book) {
     cout << "ID книги: ";
     is >> book.id;
+    is.ignore();
 
     cout << "Название: ";
-    is.ignore();
     getline(is, book.title);
 
     cout << "Автор: ";
@@ -112,19 +121,36 @@ istream& operator>>(istream& is, Book& book) {
 
     cout << "Год издания: ";
     is >> book.year;
-
-    cout << "Тип (учебник/методическое пособие/монография): ";
     is.ignore();
-    getline(is, book.type);
+
+    cout << "\nТип книги:" << endl;
+    cout << "  1. учебник" << endl;
+    cout << "  2. методическое пособие" << endl;
+    cout << "  3. монография" << endl;
+    cout << "Выберите (1-3): ";
+
+    int type_choice;
+    is >> type_choice;
+    is.ignore();
+
+    if (type_choice == 1) {
+        book.type = "учебник";
+    }
+    else if (type_choice == 2) {
+        book.type = "методическое пособие";
+    }
+    else if (type_choice == 3) {
+        book.type = "монография";
+    }
+    else {
+        throw invalid_argument("Неверный выбор типа книги");
+    }
 
     if (book.title.empty() || book.author.empty()) {
         throw invalid_argument("Название и автор не могут быть пустыми");
     }
     if (book.year < 1452 || book.year > 2026) {
         throw invalid_argument("Некорректный год издания");
-    }
-    if (book.type != "учебник" && book.type != "методическое пособие" && book.type != "монография") {
-        throw invalid_argument("Некорректный тип книги");
     }
 
     book.borrowed_by = nullptr;

@@ -14,6 +14,7 @@ private:
     static int next_id;
 
 public:
+    Reader();
     Reader(string name, string phone_num);
 
     string get_name() const;

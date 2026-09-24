@@ -6,9 +6,18 @@ using namespace std;
 
 int Reader::next_id = 1;
 
+Reader::Reader() {
+    full_name = "";
+    phone = "";
+    reader_id = 0;
+}
+
 Reader::Reader(string name, string phone_num) {
     if (name.empty()) {
         throw invalid_argument("Имя читателя не может быть пустым");
+    }
+    if (phone_num.length() < 5) {
+        throw invalid_argument("Номер телефона слишком короткий");
     }
     full_name = name;
     phone = phone_num;
@@ -63,7 +72,6 @@ ostream& operator<<(ostream& os, const Reader& reader) {
 
 istream& operator>>(istream& is, Reader& reader) {
     cout << "ФИО: ";
-    is.ignore();
     getline(is, reader.full_name);
 
     cout << "Телефон: ";
@@ -71,6 +79,9 @@ istream& operator>>(istream& is, Reader& reader) {
 
     if (reader.full_name.empty()) {
         throw invalid_argument("Имя не может быть пустым");
+    }
+    if (reader.phone.length() < 5) {
+        throw invalid_argument("Номер телефона слишком короткий (минимум 5 символов)");
     }
 
     reader.reader_id = Reader::next_id++;

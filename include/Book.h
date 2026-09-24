@@ -18,6 +18,7 @@ private:
     Reader* borrowed_by;
 
 public:
+    Book();
     Book(int book_id, string book_title, string book_author, int pub_year, string book_type);
 
     int get_id() const;
