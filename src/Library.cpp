@@ -33,14 +33,6 @@ Library::Library() : next_book_id(1) {
     readers.push_back(Reader("Наталья Морозова", "+375875596214"));
     readers.push_back(Reader("Павел Козлов", "+375859967546"));
 
-    books[2].borrow_book(&readers[0]);
-    borrow_dates[2] = time(0);
-
-    books[6].borrow_book(&readers[1]);
-    borrow_dates[6] = time(0);
-
-    cout << "Университетская библиотека инициализирована." << endl;
-    cout << "Добавлено " << books.size() << " книг и " << readers.size() << " читателей." << endl;
 }
 
 int Library::find_book_index(const Book* book) const {
