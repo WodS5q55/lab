@@ -149,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Book.h" />
+    <ClInclude Include="include\Exceptions.h" />
     <ClInclude Include="include\Library.h" />
     <ClInclude Include="include\Menu.h" />
     <ClInclude Include="include\Reader.h" />

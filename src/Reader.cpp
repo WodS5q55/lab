@@ -1,6 +1,6 @@
 ﻿#include "Reader.h"
+#include "Exceptions.h"
 #include <iostream>
-#include <stdexcept>
 
 using namespace std;
 
@@ -14,10 +14,10 @@ Reader::Reader() {
 
 Reader::Reader(string name, string phone_num) {
     if (name.empty()) {
-        throw invalid_argument("Имя читателя не может быть пустым");
+        throw InvalidReaderNameException();
     }
     if (phone_num.length() < 5) {
-        throw invalid_argument("Номер телефона слишком короткий");
+        throw InvalidPhoneException();
     }
     full_name = name;
     phone = phone_num;
@@ -30,14 +30,14 @@ int Reader::get_id() const { return reader_id; }
 
 void Reader::set_name(string new_name) {
     if (new_name.empty()) {
-        throw invalid_argument("Имя читателя не может быть пустым");
+        throw InvalidReaderNameException();
     }
     full_name = new_name;
 }
 
 void Reader::set_phone(string new_phone) {
     if (new_phone.length() < 5) {
-        throw invalid_argument("Номер телефона слишком короткий");
+        throw InvalidPhoneException();
     }
     phone = new_phone;
 }
@@ -90,10 +90,10 @@ istream& operator>>(istream& is, Reader& reader) {
     getline(is, reader.phone);
 
     if (reader.full_name.empty()) {
-        throw invalid_argument("Имя не может быть пустым");
+        throw InvalidReaderNameException();
     }
     if (reader.phone.length() < 5) {
-        throw invalid_argument("Номер телефона слишком короткий (минимум 5 символов)");
+        throw InvalidPhoneException();
     }
 
     reader.reader_id = Reader::next_id++;

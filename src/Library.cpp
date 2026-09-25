@@ -1,7 +1,7 @@
 ﻿#include "Library.h"
 #include "Utils.h"
+#include "Exceptions.h"
 #include <iostream>
-#include <stdexcept>
 #include <algorithm>
 
 using namespace std;
@@ -33,6 +33,14 @@ Library::Library() : next_book_id(1) {
     readers.push_back(Reader("Наталья Морозова", "+375875596214"));
     readers.push_back(Reader("Павел Козлов", "+375859967546"));
 
+    books[2].borrow_book(&readers[0]);
+    borrow_dates[2] = time(0);
+
+    books[6].borrow_book(&readers[1]);
+    borrow_dates[6] = time(0);
+
+    cout << "Университетская библиотека инициализирована." << endl;
+    cout << "Добавлено " << books.size() << " книг и " << readers.size() << " читателей." << endl;
 }
 
 int Library::find_book_index(const Book* book) const {
@@ -77,9 +85,11 @@ Library& Library::operator+=(const Book& book) {
 
 Library& Library::operator-=(const Book& book) {
     for (size_t i = 0; i < books.size(); i++) {
-        if (books[i] == book) {
+        if (books[i].get_title() == book.get_title()
+            && books[i].get_author() == book.get_author()) {
+
             if (books[i].is_borrowed()) {
-                throw logic_error("Нельзя удалить выданную книгу: \"" + books[i].get_title() + "\"");
+                throw BookIsBorrowedException(books[i].get_title());
             }
             books.erase(books.begin() + i);
             borrow_dates.erase(borrow_dates.begin() + i);
@@ -87,7 +97,7 @@ Library& Library::operator-=(const Book& book) {
             return *this;
         }
     }
-    throw invalid_argument("Книга не найдена");
+    throw BookNotFoundException();
 }
 
 Library& Library::operator+=(const Reader& reader) {
@@ -103,31 +113,31 @@ Library& Library::operator-=(const Reader& reader) {
             return *this;
         }
     }
-    throw invalid_argument("Читатель не найден");
+    throw ReaderNotFoundException();
 }
 
 void Library::add_book(const Book& book) {
     if (book.get_title().empty() || is_blank(book.get_title())) {
-        throw invalid_argument("Название книги не может быть пустым");
+        throw InvalidBookDataException("название пустое");
     }
     if (book.get_author().empty() || is_blank(book.get_author())) {
-        throw invalid_argument("Автор книги не может быть пустым");
+        throw InvalidBookDataException("автор пустой");
     }
     if (book.get_year() < 1452 || book.get_year() > 2026) {
-        throw invalid_argument("Год издания должен быть от 1452 до 2026");
+        throw InvalidYearException(book.get_year());
     }
     string type = book.get_type();
     if (type != "учебник" && type != "методическое пособие" && type != "монография") {
-        throw invalid_argument("Тип книги должен быть: учебник, методическое пособие или монография");
+        throw InvalidBookTypeException(type);
     }
     for (const auto& b : books) {
         if (b == book) {
-            throw invalid_argument("Книга с таким ID уже существует");
+            throw DuplicateBookException("такой ID уже есть");
         }
     }
     for (const auto& b : books) {
         if (b.get_title() == book.get_title() && b.get_author() == book.get_author()) {
-            throw invalid_argument("Книга с таким названием и автором уже существует");
+            throw DuplicateBookException("такое название и автор уже есть");
         }
     }
     books.push_back(book);
@@ -138,7 +148,7 @@ void Library::add_book(const Book& book) {
 void Library::add_reader(const Reader& reader) {
     for (const auto& r : readers) {
         if (r.get_name() == reader.get_name()) {
-            throw invalid_argument("Читатель с таким именем уже зарегистрирован");
+            throw DuplicateReaderException(reader.get_name());
         }
     }
     readers.push_back(reader);
@@ -147,7 +157,7 @@ void Library::add_reader(const Reader& reader) {
 
 void Library::remove_book(Book* book) {
     if (book->is_borrowed()) {
-        throw logic_error("Нельзя удалить книгу, которая выдана читателю");
+        throw BookIsBorrowedException(book->get_title());
     }
 
     for (size_t i = 0; i < books.size(); i++) {
@@ -158,7 +168,7 @@ void Library::remove_book(Book* book) {
             return;
         }
     }
-    throw invalid_argument("Книга не найдена");
+    throw BookNotFoundException();
 }
 
 const vector<Book>& Library::get_books() const { return books; }
@@ -205,33 +215,43 @@ Reader* Library::find_reader_by_id(int id) {
 }
 
 void Library::borrow_book(Book* book, Reader* reader) {
-    book->borrow_book(reader);
+    try {
+        book->borrow_book(reader);
 
-    int idx = find_book_index(book);
-    if (idx == -1) {
-        throw runtime_error("Книга не найдена в каталоге");
+        int idx = find_book_index(book);
+        if (idx == -1) {
+            throw BookNotFoundException();
+        }
+        borrow_dates[idx] = time(0);
+
+        cout << "[OK] Книга \"" << book->get_title() << "\" выдана студенту "
+            << reader->get_name() << " (ID: " << reader->get_id() << ")" << endl;
+        cout << "     Срок возврата: " << MAX_BORROW_DAYS << " дней" << endl;
     }
-    borrow_dates[idx] = time(0);
-
-    cout << "[OK] Книга \"" << book->get_title() << "\" выдана студенту "
-        << reader->get_name() << " (ID: " << reader->get_id() << ")" << endl;
-    cout << "     Срок возврата: " << MAX_BORROW_DAYS << " дней" << endl;
+    catch (const exception& e) {
+        throw BorrowException(e.what());
+    }
 }
 
 void Library::return_book(Book* book) {
-    Reader* reader = book->get_borrowed_by();
-    book->return_book();
+    try {
+        Reader* reader = book->get_borrowed_by();
+        book->return_book();
 
-    int idx = find_book_index(book);
-    if (idx != -1) {
-        borrow_dates[idx] = 0;
-    }
+        int idx = find_book_index(book);
+        if (idx != -1) {
+            borrow_dates[idx] = 0;
+        }
 
-    cout << "[OK] Книга \"" << book->get_title() << "\" возвращена в библиотеку";
-    if (reader != nullptr) {
-        cout << " (читатель " << reader->get_name() << ")";
+        cout << "[OK] Книга \"" << book->get_title() << "\" возвращена в библиотеку";
+        if (reader != nullptr) {
+            cout << " (читатель " << reader->get_name() << ")";
+        }
+        cout << endl;
     }
-    cout << endl;
+    catch (const exception& e) {
+        throw ReturnException(e.what());
+    }
 }
 
 void Library::display_all_books() const {
@@ -239,10 +259,10 @@ void Library::display_all_books() const {
     cout << "-------------------------------------------" << endl;
 
     for (size_t i = 0; i < books.size(); i++) {
-        cout << "* ID: " << books[i].get_id() << " | ";   
+        cout << "* #" << books[i].get_id() << " ";
         cout << books[i].get_title()
-            << " (" << books[i].get_author() << ", " << books[i].get_year() << " г.) "
-            << "[" << books[i].get_type() << "] - ";
+            << " - " << books[i].get_author()
+            << " (" << books[i].get_year() << ") [" << books[i].get_type() << "] - ";
 
         if (books[i].is_available()) {
             cout << "Доступна";
@@ -421,7 +441,7 @@ void Library::compare_two_readers() const {
 void Library::change_reader_name(Reader* reader, string new_name) {
     for (const auto& r : readers) {
         if (&r != reader && r.get_name() == new_name) {
-            throw invalid_argument("Читатель с таким именем уже зарегистрирован");
+            throw DuplicateReaderException(new_name);
         }
     }
     reader->set_name(new_name);

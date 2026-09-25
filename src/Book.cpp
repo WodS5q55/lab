@@ -1,7 +1,7 @@
 ﻿#include "Book.h"
 #include "Reader.h"
+#include "Exceptions.h"
 #include <iostream>
-#include <stdexcept>
 
 using namespace std;
 
@@ -16,13 +16,13 @@ Book::Book() {
 
 Book::Book(int book_id, string book_title, string book_author, int pub_year, string book_type) {
     if (book_title.empty() || book_author.empty()) {
-        throw invalid_argument("Название и автор книги не могут быть пустыми");
+        throw InvalidBookDataException("название или автор пустые");
     }
     if (pub_year < 1452 || pub_year > 2026) {
-        throw invalid_argument("Некорректный год издания");
+        throw InvalidYearException(pub_year);
     }
     if (book_type != "учебник" && book_type != "методическое пособие" && book_type != "монография") {
-        throw invalid_argument("Тип книги должен быть: учебник, методическое пособие или монография");
+        throw InvalidBookTypeException(book_type);
     }
 
     id = book_id;
@@ -45,14 +45,14 @@ bool Book::is_borrowed() const { return borrowed_by != nullptr; }
 
 void Book::borrow_book(Reader* reader) {
     if (is_borrowed()) {
-        throw logic_error("Книга недоступна для выдачи");
+        throw BookNotAvailableException();
     }
     borrowed_by = reader;
 }
 
 void Book::return_book() {
     if (is_available()) {
-        throw logic_error("Книга не была выдана");
+        throw BookNotBorrowedException();
     }
     borrowed_by = nullptr;
 }
@@ -143,14 +143,14 @@ istream& operator>>(istream& is, Book& book) {
         book.type = "монография";
     }
     else {
-        throw invalid_argument("Неверный выбор типа книги");
+        throw InvalidBookTypeException("неверный выбор");
     }
 
     if (book.title.empty() || book.author.empty()) {
-        throw invalid_argument("Название и автор не могут быть пустыми");
+        throw InvalidBookDataException("название или автор пустые");
     }
     if (book.year < 1452 || book.year > 2026) {
-        throw invalid_argument("Некорректный год издания");
+        throw InvalidYearException(book.year);
     }
 
     book.borrowed_by = nullptr;
