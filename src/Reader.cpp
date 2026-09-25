@@ -51,16 +51,28 @@ void Reader::display_info() const {
     cout << "-------------------------------------------" << endl;
 }
 
+bool Reader::operator<(const Reader& other) const {
+    return reader_id < other.reader_id;
+}
+
+bool Reader::operator>(const Reader& other) const {
+    return reader_id > other.reader_id;
+}
+
 bool Reader::operator==(const Reader& other) const {
-    return reader_id == other.reader_id;
+    return full_name == other.full_name;
 }
 
 bool Reader::operator!=(const Reader& other) const {
-    return reader_id != other.reader_id;
+    return full_name != other.full_name;
 }
 
-bool Reader::operator<(const Reader& other) const {
-    return full_name < other.full_name;
+bool Reader::operator<=(const Reader& other) const {
+    return full_name <= other.full_name;
+}
+
+bool Reader::operator>=(const Reader& other) const {
+    return full_name >= other.full_name;
 }
 
 ostream& operator<<(ostream& os, const Reader& reader) {

@@ -26,9 +26,14 @@ public:
 
     void display_info() const;
 
-    bool operator==(const Reader& other) const;
-    bool operator!=(const Reader& other) const;
-    bool operator<(const Reader& other) const;
+
+    bool operator<(const Reader& other) const;  
+    bool operator>(const Reader& other) const;   
+
+    bool operator==(const Reader& other) const; 
+    bool operator!=(const Reader& other) const;  
+    bool operator<=(const Reader& other) const;   
+    bool operator>=(const Reader& other) const;  
 
     friend ostream& operator<<(ostream& os, const Reader& reader);
     friend istream& operator>>(istream& is, Reader& reader);

@@ -76,20 +76,20 @@ void Book::display_info() const {
     cout << "-------------------------------------------" << endl;
 }
 
-bool Book::operator==(const Book& other) const {
-    return id == other.id;
-}
-
-bool Book::operator!=(const Book& other) const {
-    return id != other.id;
-}
-
 bool Book::operator<(const Book& other) const {
-    return year < other.year;
+    return id < other.id;
 }
 
 bool Book::operator>(const Book& other) const {
-    return year > other.year;
+    return id > other.id;
+}
+
+bool Book::operator==(const Book& other) const {
+    return year == other.year;
+}
+
+bool Book::operator!=(const Book& other) const {
+    return year != other.year;
 }
 
 bool Book::operator<=(const Book& other) const {
