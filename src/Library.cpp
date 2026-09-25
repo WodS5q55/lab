@@ -226,7 +226,7 @@ void Library::borrow_book(Book* book, Reader* reader) {
 }
 
 void Library::return_book(Book* book) {
-    try {
+
         Reader* reader = book->get_borrowed_by();
         book->return_book();
 
@@ -241,10 +241,7 @@ void Library::return_book(Book* book) {
         }
         cout << endl;
     }
-    catch (const exception& e) {
-        throw ReturnException(e.what());
-    }
-}
+
 
 void Library::display_all_books() const {
     cout << "\nБИБЛИОТЕЧНЫЙ КАТАЛОГ (" << books.size() << " книг)" << endl;
