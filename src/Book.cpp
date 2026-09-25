@@ -1,6 +1,7 @@
 ﻿#include "Book.h"
 #include "Reader.h"
 #include "Exceptions.h"
+#include "Utils.h"
 #include <iostream>
 
 using namespace std;
@@ -15,15 +16,7 @@ Book::Book() {
 }
 
 Book::Book(int book_id, string book_title, string book_author, int pub_year, string book_type) {
-    if (book_title.empty() || book_author.empty()) {
-        throw InvalidBookDataException("название или автор пустые");
-    }
-    if (pub_year < 1452 || pub_year > 2026) {
-        throw InvalidYearException(pub_year);
-    }
-    if (book_type != "учебник" && book_type != "методическое пособие" && book_type != "монография") {
-        throw InvalidBookTypeException(book_type);
-    }
+    validate_book_fields(book_title, book_author, pub_year, book_type);
 
     id = book_id;
     title = book_title;
@@ -146,12 +139,7 @@ istream& operator>>(istream& is, Book& book) {
         throw InvalidBookTypeException("неверный выбор");
     }
 
-    if (book.title.empty() || book.author.empty()) {
-        throw InvalidBookDataException("название или автор пустые");
-    }
-    if (book.year < 1452 || book.year > 2026) {
-        throw InvalidYearException(book.year);
-    }
+    validate_book_fields(book.title, book.author, book.year, book.type);
 
     book.borrowed_by = nullptr;
     return is;

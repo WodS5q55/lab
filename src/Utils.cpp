@@ -1,5 +1,6 @@
 #include "Utils.h"
 #include "Library.h"
+#include "Exceptions.h"
 #include <iostream>
 #include <limits>
 #include <cctype>
@@ -16,6 +17,30 @@ bool is_blank(const string& str) {
 void clear_input() {
     cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
+}
+
+void validate_book_fields(string title, string author, int year, string type) {
+    if (title.empty() || is_blank(title)) {
+        throw InvalidBookDataException("название пустое");
+    }
+    if (author.empty() || is_blank(author)) {
+        throw InvalidBookDataException("автор пустой");
+    }
+    if (year < 1452 || year > 2026) {
+        throw InvalidYearException(year);
+    }
+    if (type != "учебник" && type != "методическое пособие" && type != "монография") {
+        throw InvalidBookTypeException(type);
+    }
+}
+
+void validate_reader_fields(string name, string phone) {
+    if (name.empty() || is_blank(name)) {
+        throw InvalidReaderNameException();
+    }
+    if (phone.length() < 5) {
+        throw InvalidPhoneException();
+    }
 }
 
 int select_from_list(const vector<string>& items, const string& prompt) {

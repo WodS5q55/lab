@@ -17,4 +17,7 @@ Book* select_book(vector<Book*>& candidates, const string& prompt);
 Reader* select_reader(Library& library, const string& prompt);
 Book* select_any_book(Library& library, const string& prompt);
 
+void validate_book_fields(string title, string author, int year, string type);
+void validate_reader_fields(string name, string phone);
+
 #endif

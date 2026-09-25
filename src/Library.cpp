@@ -109,19 +109,13 @@ Library& Library::operator-=(const Reader& reader) {
 }
 
 void Library::add_book(const Book& book) {
-    if (book.get_title().empty() || is_blank(book.get_title())) {
-        throw InvalidBookDataException("название пустое");
-    }
-    if (book.get_author().empty() || is_blank(book.get_author())) {
-        throw InvalidBookDataException("автор пустой");
-    }
-    if (book.get_year() < 1452 || book.get_year() > 2026) {
-        throw InvalidYearException(book.get_year());
-    }
-    string type = book.get_type();
-    if (type != "учебник" && type != "методическое пособие" && type != "монография") {
-        throw InvalidBookTypeException(type);
-    }
+    validate_book_fields(
+        book.get_title(),
+        book.get_author(),
+        book.get_year(),
+        book.get_type()
+    );
+
     for (const auto& b : books) {
         if (b == book) {
             throw DuplicateBookException("такой ID уже есть");
@@ -226,7 +220,7 @@ void Library::borrow_book(Book* book, Reader* reader) {
 }
 
 void Library::return_book(Book* book) {
-
+    try {
         Reader* reader = book->get_borrowed_by();
         book->return_book();
 
@@ -241,7 +235,10 @@ void Library::return_book(Book* book) {
         }
         cout << endl;
     }
-
+    catch (const exception& e) {
+        throw ReturnException(e.what());
+    }
+}
 
 void Library::display_all_books() const {
     cout << "\nБИБЛИОТЕЧНЫЙ КАТАЛОГ (" << books.size() << " книг)" << endl;
@@ -428,6 +425,9 @@ void Library::compare_two_readers() const {
 }
 
 void Library::change_reader_name(Reader* reader, string new_name) {
+    if (new_name.empty() || is_blank(new_name)) {
+        throw InvalidReaderNameException();
+    }
     for (const auto& r : readers) {
         if (&r != reader && r.get_name() == new_name) {
             throw DuplicateReaderException(new_name);
