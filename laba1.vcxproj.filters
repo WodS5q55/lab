@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\Book.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Library.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Menu.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Reader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Book.h">
+      <Filter>Заголовки</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Exceptions.h">
+      <Filter>Заголовки</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Library.h">
+      <Filter>Заголовки</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Menu.h">
+      <Filter>Заголовки</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Reader.h">
+      <Filter>Заголовки</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utils.h">
+      <Filter>Заголовки</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Заголовки">
+      <UniqueIdentifier>{d7144996-c0c6-4a6e-80bd-2a845debf8c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{86291b0f-88db-4e6a-ac33-2e72ab48fa18}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
