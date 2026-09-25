@@ -239,7 +239,10 @@ void Library::display_all_books() const {
     cout << "-------------------------------------------" << endl;
 
     for (size_t i = 0; i < books.size(); i++) {
-        cout << "* " << books[i] << " - ";
+        cout << "* ID: " << books[i].get_id() << " | ";   
+        cout << books[i].get_title()
+            << " (" << books[i].get_author() << ", " << books[i].get_year() << " г.) "
+            << "[" << books[i].get_type() << "] - ";
 
         if (books[i].is_available()) {
             cout << "Доступна";
