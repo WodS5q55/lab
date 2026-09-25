@@ -9,16 +9,16 @@ using namespace std;
 const int MAX_BORROW_DAYS = 14;
 
 Library::Library() : next_book_id(1) {
-    books.push_back(Book(next_book_id++, "Высшая математика", "Иванов А.А.", 2020, "учебник"));
-    books.push_back(Book(next_book_id++, "Дискретная математика", "Иванов А.А.", 2021, "учебник"));
-    books.push_back(Book(next_book_id++, "Физика для инженеров", "Петров Б.В.", 2019, "учебник"));
-    books.push_back(Book(next_book_id++, "Программирование на C++", "Сидоров В.Г.", 2021, "учебник"));
-    books.push_back(Book(next_book_id++, "Основы баз данных", "Козлова Е.М.", 2022, "учебник"));
-    books.push_back(Book(next_book_id++, "Теория вероятностей", "Козлова Е.М.", 2021, "учебник"));
-    books.push_back(Book(next_book_id++, "Методика решения задач по физике", "Смирнов Д.А.", 2020, "методическое пособие"));
-    books.push_back(Book(next_book_id++, "Практикум по программированию", "Васильева О.И.", 2021, "методическое пособие"));
-    books.push_back(Book(next_book_id++, "Современные алгоритмы машинного обучения", "Новиков С.П.", 2023, "монография"));
-    books.push_back(Book(next_book_id++, "Искусственный интеллект и нейросети", "Михайлов А.Н.", 2022, "монография"));
+    books.push_back(Book(next_book_id++, "Высшая математика", "Иванов А.А.", 2020, 450, "учебник"));
+    books.push_back(Book(next_book_id++, "Дискретная математика", "Иванов А.А.", 2021, 380, "учебник"));
+    books.push_back(Book(next_book_id++, "Физика для инженеров", "Петров Б.В.", 2019, 520, "учебник"));
+    books.push_back(Book(next_book_id++, "Программирование на C++", "Сидоров В.Г.", 2021, 640, "учебник"));
+    books.push_back(Book(next_book_id++, "Основы баз данных", "Козлова Е.М.", 2022, 300, "учебник"));
+    books.push_back(Book(next_book_id++, "Теория вероятностей", "Козлова Е.М.", 2021, 420, "учебник"));
+    books.push_back(Book(next_book_id++, "Методика решения задач по физике", "Смирнов Д.А.", 2020, 250, "методическое пособие"));
+    books.push_back(Book(next_book_id++, "Практикум по программированию", "Васильева О.И.", 2021, 280, "методическое пособие"));
+    books.push_back(Book(next_book_id++, "Современные алгоритмы машинного обучения", "Новиков С.П.", 2023, 800, "монография"));
+    books.push_back(Book(next_book_id++, "Искусственный интеллект и нейросети", "Михайлов А.Н.", 2022, 720, "монография"));
 
     borrow_dates.resize(books.size(), 0);
 
@@ -247,7 +247,7 @@ void Library::display_all_books() const {
     for (size_t i = 0; i < books.size(); i++) {
         cout << "* #" << books[i].get_id() << " ";
         cout << books[i].get_title()
-            << " - " << books[i].get_author()
+            << " (" << books[i].get_pages() << " стр.) - " << books[i].get_author()
             << " (" << books[i].get_year() << ") [" << books[i].get_type() << "] - ";
 
         if (books[i].is_available()) {
@@ -371,9 +371,9 @@ void Library::compare_two_books() const {
     cout << "Книга 1: " << *b1 << endl;
     cout << "Книга 2: " << *b2 << endl;
 
-    cout << "\n--- СРАВНЕНИЕ ПО ID (уникальный идентификатор) ---" << endl;
-    cout << "b1 < b2 (по ID)?    " << (*b1 < *b2 ? "ДА" : "НЕТ") << endl;
-    cout << "b1 > b2 (по ID)?    " << (*b1 > *b2 ? "ДА" : "НЕТ") << endl;
+    cout << "\n--- СРАВНЕНИЕ ПО КОЛИЧЕСТВУ СТРАНИЦ ---" << endl;
+    cout << "b1 < b2 (по страницам)?    " << (*b1 < *b2 ? "ДА" : "НЕТ") << endl;
+    cout << "b1 > b2 (по страницам)?    " << (*b1 > *b2 ? "ДА" : "НЕТ") << endl;
 
     cout << "\n--- СРАВНЕНИЕ ПО ГОДУ ИЗДАНИЯ ---" << endl;
     cout << "b1 == b2 (по году)? " << (*b1 == *b2 ? "ДА" : "НЕТ") << endl;
@@ -421,6 +421,7 @@ void Library::compare_two_readers() const {
     cout << "r1 != r2 (по имени)? " << (r1 != r2 ? "ДА" : "НЕТ") << endl;
     cout << "r1 <= r2 (по имени)? " << (r1 <= r2 ? "ДА" : "НЕТ") << endl;
     cout << "r1 >= r2 (по имени)? " << (r1 >= r2 ? "ДА" : "НЕТ") << endl;
+
 
 }
 

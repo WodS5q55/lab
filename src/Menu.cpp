@@ -11,7 +11,7 @@ void show_menu(const Library& library) {
     cout << "       УНИВЕРСИТЕТСКАЯ БИБЛИОТЕКА" << endl;
     cout << "===========================================" << endl;
     cout << "1. Зарегистрировать читателя(>>, +=)" << endl;
-    cout << "2. Выдать книгу" << endl;
+    cout << "2. Выдать книгу" << endl; 
     cout << "3. Вернуть книгу" << endl;
     cout << "4. Показать все книги" << endl;
     cout << "5. Показать всех читателей" << endl;
@@ -99,7 +99,7 @@ void run_menu(Library& library) {
                 if (!reader) break;
                 library.display_reader_info(reader);
                 break;
-            }
+            }   
             case 8:
                 library.display_overdue_books();
                 break;
@@ -113,7 +113,8 @@ void run_menu(Library& library) {
 
                 int new_id = library.get_book_count() + 1;
                 Book final_book(new_id, new_book.get_title(), new_book.get_author(),
-                    new_book.get_year(), new_book.get_type());
+                    new_book.get_year(), new_book.get_pages(), 
+                    new_book.get_type());
 
                 library += final_book;
                 break;

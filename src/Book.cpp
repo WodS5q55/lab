@@ -11,17 +11,23 @@ Book::Book() {
     title = "";
     author = "";
     year = 0;
+    pages = 0;
     type = "";
     borrowed_by = nullptr;
 }
 
-Book::Book(int book_id, string book_title, string book_author, int pub_year, string book_type) {
+Book::Book(int book_id, string book_title, string book_author, int pub_year, int book_pages, string book_type) {
     validate_book_fields(book_title, book_author, pub_year, book_type);
+
+    if (book_pages < 1 || book_pages > 10000) {
+        throw InvalidBookDataException("некорректное количество страниц");
+    }
 
     id = book_id;
     title = book_title;
     author = book_author;
     year = pub_year;
+    pages = book_pages;
     type = book_type;
     borrowed_by = nullptr;
 }
@@ -30,6 +36,7 @@ int Book::get_id() const { return id; }
 string Book::get_title() const { return title; }
 string Book::get_author() const { return author; }
 int Book::get_year() const { return year; }
+int Book::get_pages() const { return pages; }
 string Book::get_type() const { return type; }
 Reader* Book::get_borrowed_by() const { return borrowed_by; }
 
@@ -52,7 +59,7 @@ void Book::return_book() {
 
 string Book::short_line() const {
     string status = is_available() ? "Доступна" : "Выдана";
-    return "#" + to_string(id) + " " + title + " - " + author + " [" + type + "] - " + status;
+    return "#" + to_string(id) + " " + title + " (" + to_string(pages) + " стр.) - " + author + " [" + type + "] - " + status;
 }
 
 void Book::display_info() const {
@@ -61,6 +68,7 @@ void Book::display_info() const {
     cout << "Название: " << title << endl;
     cout << "Автор: " << author << endl;
     cout << "Год издания: " << year << endl;
+    cout << "Страниц: " << pages << endl;
     cout << "Тип: " << type << endl;
     cout << "Статус: " << (is_available() ? "Доступна" : "Выдана") << endl;
     if (is_borrowed()) {
@@ -69,12 +77,13 @@ void Book::display_info() const {
     cout << "-------------------------------------------" << endl;
 }
 
+
 bool Book::operator<(const Book& other) const {
-    return id < other.id;
+    return pages < other.pages;
 }
 
 bool Book::operator>(const Book& other) const {
-    return id > other.id;
+    return pages > other.pages;
 }
 
 bool Book::operator==(const Book& other) const {
@@ -96,7 +105,7 @@ bool Book::operator>=(const Book& other) const {
 ostream& operator<<(ostream& os, const Book& book) {
     os << "Book#" << book.id
         << " \"" << book.title << "\" - " << book.author
-        << " (" << book.year << ") [" << book.type << "] "
+        << " (" << book.year << ", " << book.pages << " стр.) [" << book.type << "] "
         << (book.is_available() ? "Доступна" : "Выдана");
     return os;
 }
@@ -115,6 +124,14 @@ istream& operator>>(istream& is, Book& book) {
     cout << "Год издания: ";
     is >> book.year;
     is.ignore();
+
+    cout << "Количество страниц: ";
+    is >> book.pages;
+    is.ignore();
+
+    if (book.pages < 1 || book.pages > 10000) {
+        throw InvalidBookDataException("количество страниц должно быть от 1 до 10000");
+    }
 
     cout << "\nТип книги:" << endl;
     cout << "  1. учебник" << endl;
