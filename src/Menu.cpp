@@ -113,36 +113,13 @@ void run_menu(Library& library) {
                 cout << "\n--- ДОБАВЛЕНИЕ КНИГИ ---" << endl;
                 clear_input();
 
-                string title, author, type;
-                int year, pages, type_choice;
+                string title = input_non_empty_string("Название: ");
+                string author = input_non_empty_string("Автор: ");
 
-                do {
-                    cout << "Название: ";
-                    getline(cin, title);
-                    if (title.empty() || is_blank(title))
-                        cout << "[ОШИБКА] Название не может быть пустым!" << endl;
-                } while (title.empty() || is_blank(title));
+                int year = input_int_in_range("Год (1452-2026): ", 1452, 2026);
+                int pages = input_int_in_range("Страниц (1-10000): ", 1, 10000);
 
-                do {
-                    cout << "Автор: ";
-                    getline(cin, author);
-                    if (author.empty() || is_blank(author))
-                        cout << "[ОШИБКА] Автор не может быть пустым!" << endl;
-                } while (author.empty() || is_blank(author));
-
-                do {
-                    cout << "Год (1452-2026): ";
-                    cin >> year;
-                    if (cin.fail()) { clear_input(); continue; }
-                } while (year < 1452 || year > 2026);
-
-                do {
-                    cout << "Страниц (1-10000): ";
-                    cin >> pages;
-                    if (cin.fail()) { clear_input(); continue; }
-                } while (pages < 1 || pages > 10000);
-                clear_input();
-
+                int type_choice;
                 do {
                     cout << "Тип:\n  1. учебник\n  2. методическое пособие\n  3. монография\n";
                     cout << "Выберите (1-3): ";
@@ -151,6 +128,7 @@ void run_menu(Library& library) {
                 } while (type_choice < 1 || type_choice > 3);
                 clear_input();
 
+                string type;
                 if (type_choice == 1) type = "учебник";
                 else if (type_choice == 2) type = "методическое пособие";
                 else type = "монография";
@@ -165,15 +143,12 @@ void run_menu(Library& library) {
                 cout << "\n--- ДОБАВЛЕНИЕ ЖУРНАЛА ---" << endl;
                 clear_input();
 
-                string title, author;
-                int year, pages, issue;
+                string title = input_non_empty_string("Название: ");
+                string author = input_non_empty_string("Издательство: ");
 
-                cout << "Название: "; getline(cin, title);
-                cout << "Издательство: "; getline(cin, author);
-                cout << "Год: "; cin >> year;
-                cout << "Страниц: "; cin >> pages;
-                cout << "Номер выпуска: "; cin >> issue;
-                clear_input();
+                int year = input_int_in_range("Год (1452-2026): ", 1452, 2026);
+                int pages = input_int_in_range("Страниц (1-500): ", 1, 500);
+                int issue = input_int_in_range("Номер выпуска: ", 1, 10000);
 
                 int new_id = library.get_publication_count() + 1;
                 Magazine* new_mag = new Magazine(new_id, title, author, year, pages, issue);
@@ -185,37 +160,16 @@ void run_menu(Library& library) {
                 cout << "\n--- ДОБАВЛЕНИЕ ГАЗЕТЫ ---" << endl;
                 clear_input();
 
-                string title, author, date;
-                int pages;
+                string title = input_non_empty_string("Название: ");
+                string author = input_non_empty_string("Издательство: ");
+                int pages = input_int_in_range("Страниц (1-96): ", 1, 96);
 
-                do {
-                    cout << "Название: ";
-                    getline(cin, title);
-                    if (title.empty() || is_blank(title))
-                        cout << "[ОШИБКА] Название не может быть пустым!" << endl;
-                } while (title.empty() || is_blank(title));
-
-                do {
-                    cout << "Издательство: ";
-                    getline(cin, author);
-                    if (author.empty() || is_blank(author))
-                        cout << "[ОШИБКА] Издательство не может быть пустым!" << endl;
-                } while (author.empty() || is_blank(author));
-
-                do {
-                    cout << "Страниц (1-96): ";
-                    cin >> pages;
-                    if (cin.fail()) { clear_input(); continue; }
-                    if (pages < 1 || pages > 96)
-                        cout << "[ОШИБКА] Страниц должно быть от 1 до 96!" << endl;
-                } while (pages < 1 || pages > 96);
-                clear_input();
-
+                string date;
                 do {
                     cout << "Дата выпуска (дд.мм.гггг): ";
                     getline(cin, date);
                     if (!is_valid_date(date))
-                        cout << "[ОШИБКА] Некорректная дата! Формат: дд.мм.гггг (например, 15.09.2024)" << endl;
+                        cout << "[ОШИБКА] Некорректная дата! Формат: дд.мм.гггг" << endl;
                 } while (!is_valid_date(date));
 
                 int new_id = library.get_publication_count() + 1;

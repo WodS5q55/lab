@@ -77,6 +77,37 @@ int select_from_list(const vector<string>& items, const string& prompt) {
     return choice - 1;
 }
 
+string input_non_empty_string(const string& prompt) {
+    string value;
+    do {
+        cout << prompt;
+        getline(cin, value);
+        if (value.empty() || is_blank(value)) {
+            cout << "[ОШИБКА] Поле не может быть пустым!" << endl;
+        }
+    } while (value.empty() || is_blank(value));
+    return value;
+}
+
+int input_int_in_range(const string& prompt, int min_val, int max_val) {
+    int value;
+    do {
+        cout << prompt;
+        cin >> value;
+        if (cin.fail()) {
+            clear_input();
+            cout << "[ОШИБКА] Введите число!" << endl;
+            continue;
+        }
+        if (value < min_val || value > max_val) {
+            cout << "[ОШИБКА] Значение должно быть от "
+                << min_val << " до " << max_val << "!" << endl;
+        }
+    } while (value < min_val || value > max_val);
+    clear_input();
+    return value;
+}
+
 Publication* select_publication(vector<Publication*>& candidates, const string& prompt) {
     vector<string> lines;
     for (auto* pub : candidates) {

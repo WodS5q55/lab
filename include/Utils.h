@@ -10,6 +10,8 @@ using namespace std;
 
 class Library;
 
+string input_non_empty_string(const string& prompt);
+int input_int_in_range(const string& prompt, int min_val, int max_val);
 void clear_input();
 bool is_blank(const string& str);
 bool is_valid_date(const string& date);
