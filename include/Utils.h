@@ -1,7 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include "Book.h"
+#include "Publication.h"
 #include "Reader.h"
 #include <vector>
 #include <string>
@@ -12,12 +12,10 @@ class Library;
 
 void clear_input();
 bool is_blank(const string& str);
+bool is_valid_date(const string& date);
 int select_from_list(const vector<string>& items, const string& prompt);
-Book* select_book(vector<Book*>& candidates, const string& prompt);
+Publication* select_publication(vector<Publication*>& candidates, const string& prompt);
 Reader* select_reader(Library& library, const string& prompt);
-Book* select_any_book(Library& library, const string& prompt);
-
-void validate_book_fields(string title, string author, int year, string type);
-void validate_reader_fields(string name, string phone);
+Publication* select_any_publication(Library& library, const string& prompt);
 
 #endif

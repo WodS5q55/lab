@@ -9,7 +9,7 @@ using namespace std;
 class InvalidBookDataException : public invalid_argument {
 public:
     InvalidBookDataException(const string& message)
-        : invalid_argument("Некорректные данные книги: " + message) {}
+        : invalid_argument("Некорректные данные издания: " + message) {}
 };
 
 class InvalidYearException : public invalid_argument {
@@ -27,31 +27,31 @@ public:
 class BookNotAvailableException : public logic_error {
 public:
     BookNotAvailableException()
-        : logic_error("Книга недоступна для выдачи") {}
+        : logic_error("Издание недоступно для выдачи") {}
 };
 
 class BookNotBorrowedException : public logic_error {
 public:
     BookNotBorrowedException()
-        : logic_error("Книга не была выдана") {}
+        : logic_error("Издание не было выдано") {}
 };
 
 class BookIsBorrowedException : public logic_error {
 public:
     BookIsBorrowedException(const string& title)
-        : logic_error("Нельзя удалить выданную книгу: \"" + title + "\"") {}
+        : logic_error("Нельзя удалить выданное издание: \"" + title + "\"") {}
 };
 
 class DuplicateBookException : public invalid_argument {
 public:
     DuplicateBookException(const string& message)
-        : invalid_argument("Книга уже существует: " + message) {}
+        : invalid_argument("Издание уже существует: " + message) {}
 };
 
 class BookNotFoundException : public invalid_argument {
 public:
     BookNotFoundException()
-        : invalid_argument("Книга не найдена") {}
+        : invalid_argument("Издание не найдено") {}
 };
 
 class InvalidReaderNameException : public invalid_argument {

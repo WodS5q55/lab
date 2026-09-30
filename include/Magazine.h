@@ -1,18 +1,18 @@
-﻿#ifndef BOOK_H
-#define BOOK_H
+#ifndef MAGAZINE_H
+#define MAGAZINE_H
 
 #include "Publication.h"
 
-class Book : public Publication {
+class Magazine : public Publication {
 private:
-    string type;
+    int issue_number;
 
 public:
-    Book();
-    Book(int book_id, string book_title, string book_author, int pub_year, int book_pages, string book_type);
+    Magazine();
+    Magazine(int mag_id, string mag_title, string mag_author, int pub_year, int mag_pages, int issue);
 
-    string get_book_type() const;
-    void set_book_type(string new_type);
+    int get_issue_number() const;
+    void set_issue_number(int new_issue);
 
     string get_type() const override;
     string short_line() const override;

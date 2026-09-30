@@ -142,8 +142,11 @@
   <ItemGroup>
     <ClCompile Include="src\Book.cpp" />
     <ClCompile Include="src\Library.cpp" />
+    <ClCompile Include="src\Magazine.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Menu.cpp" />
+    <ClCompile Include="src\Newspaper.cpp" />
+    <ClCompile Include="src\Publication.cpp" />
     <ClCompile Include="src\Reader.cpp" />
     <ClCompile Include="src\Utils.cpp" />
   </ItemGroup>
@@ -151,7 +154,10 @@
     <ClInclude Include="include\Book.h" />
     <ClInclude Include="include\Exceptions.h" />
     <ClInclude Include="include\Library.h" />
+    <ClInclude Include="include\Magazine.h" />
     <ClInclude Include="include\Menu.h" />
+    <ClInclude Include="include\Newspaper.h" />
+    <ClInclude Include="include\Publication.h" />
     <ClInclude Include="include\Reader.h" />
     <ClInclude Include="include\Utils.h" />
   </ItemGroup>

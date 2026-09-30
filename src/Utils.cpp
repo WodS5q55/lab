@@ -14,33 +14,37 @@ bool is_blank(const string& str) {
     return true;
 }
 
+bool is_valid_date(const string& date) {
+    if (date.length() != 10) return false;
+    if (date[2] != '.' || date[5] != '.') return false;
+
+    for (int i = 0; i < 10; i++) {
+        if (i == 2 || i == 5) continue;
+        if (!isdigit(date[i])) return false;
+    }
+
+    int day = stoi(date.substr(0, 2));
+    int month = stoi(date.substr(3, 2));
+    int year = stoi(date.substr(6, 4));
+
+    if (day < 1 || day > 31) return false;
+    if (month < 1 || month > 12) return false;
+    if (year < 1452 || year > 2026) return false;
+
+    int days_in_month[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+    if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
+        days_in_month[1] = 29;
+    }
+
+    if (day > days_in_month[month - 1]) return false;
+
+    return true;
+}
+
 void clear_input() {
     cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
-}
-
-void validate_book_fields(string title, string author, int year, string type) {
-    if (title.empty() || is_blank(title)) {
-        throw InvalidBookDataException("название пустое");
-    }
-    if (author.empty() || is_blank(author)) {
-        throw InvalidBookDataException("автор пустой");
-    }
-    if (year < 1452 || year > 2026) {
-        throw InvalidYearException(year);
-    }
-    if (type != "учебник" && type != "методическое пособие" && type != "монография") {
-        throw InvalidBookTypeException(type);
-    }
-}
-
-void validate_reader_fields(string name, string phone) {
-    if (name.empty() || is_blank(name)) {
-        throw InvalidReaderNameException();
-    }
-    if (phone.length() < 5) {
-        throw InvalidPhoneException();
-    }
 }
 
 int select_from_list(const vector<string>& items, const string& prompt) {
@@ -73,10 +77,10 @@ int select_from_list(const vector<string>& items, const string& prompt) {
     return choice - 1;
 }
 
-Book* select_book(vector<Book*>& candidates, const string& prompt) {
+Publication* select_publication(vector<Publication*>& candidates, const string& prompt) {
     vector<string> lines;
-    for (auto* book : candidates) {
-        lines.push_back(book->short_line());
+    for (auto* pub : candidates) {
+        lines.push_back(pub->short_line());
     }
     int idx = select_from_list(lines, prompt);
     if (idx < 0) return nullptr;
@@ -95,10 +99,7 @@ Reader* select_reader(Library& library, const string& prompt) {
     return &readers[static_cast<size_t>(idx)];
 }
 
-Book* select_any_book(Library& library, const string& prompt) {
-    vector<Book*> all;
-    for (auto& b : library.get_books_mutable()) {
-        all.push_back(&b);
-    }
-    return select_book(all, prompt);
+Publication* select_any_publication(Library& library, const string& prompt) {
+    vector<Publication*> all = library.get_publications();
+    return select_publication(all, prompt);
 }

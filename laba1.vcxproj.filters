@@ -19,6 +19,15 @@
     <ClCompile Include="src\Utils.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Magazine.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Newspaper.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Publication.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Book.h">
@@ -37,6 +46,15 @@
       <Filter>Заголовки</Filter>
     </ClInclude>
     <ClInclude Include="include\Utils.h">
+      <Filter>Заголовки</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Magazine.h">
+      <Filter>Заголовки</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Newspaper.h">
+      <Filter>Заголовки</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Publication.h">
       <Filter>Заголовки</Filter>
     </ClInclude>
   </ItemGroup>

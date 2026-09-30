@@ -1,18 +1,18 @@
-﻿#ifndef BOOK_H
-#define BOOK_H
+#ifndef NEWSPAPER_H
+#define NEWSPAPER_H
 
 #include "Publication.h"
 
-class Book : public Publication {
+class Newspaper : public Publication {
 private:
-    string type;
+    string publication_date;
 
 public:
-    Book();
-    Book(int book_id, string book_title, string book_author, int pub_year, int book_pages, string book_type);
+    Newspaper();
+    Newspaper(int np_id, string np_title, string np_author, int np_pages, string date);
 
-    string get_book_type() const;
-    void set_book_type(string new_type);
+    string get_publication_date() const;
+    void set_publication_date(string new_date);
 
     string get_type() const override;
     string short_line() const override;

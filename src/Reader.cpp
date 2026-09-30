@@ -1,5 +1,6 @@
 ﻿#include "Reader.h"
 #include "Exceptions.h"
+#include "Utils.h"
 #include <iostream>
 
 using namespace std;
@@ -13,7 +14,7 @@ Reader::Reader() {
 }
 
 Reader::Reader(string name, string phone_num) {
-    if (name.empty()) {
+    if (name.empty() || is_blank(name)) {
         throw InvalidReaderNameException();
     }
     if (phone_num.length() < 5) {
@@ -29,7 +30,7 @@ string Reader::get_phone() const { return phone; }
 int Reader::get_id() const { return reader_id; }
 
 void Reader::set_name(string new_name) {
-    if (new_name.empty()) {
+    if (new_name.empty() || is_blank(new_name)) {
         throw InvalidReaderNameException();
     }
     full_name = new_name;
@@ -51,20 +52,20 @@ void Reader::display_info() const {
     cout << "-------------------------------------------" << endl;
 }
 
-bool Reader::operator<(const Reader& other) const {
-    return reader_id < other.reader_id;
-}
-
-bool Reader::operator>(const Reader& other) const {
-    return reader_id > other.reader_id;
-}
-
 bool Reader::operator==(const Reader& other) const {
     return full_name == other.full_name;
 }
 
 bool Reader::operator!=(const Reader& other) const {
     return full_name != other.full_name;
+}
+
+bool Reader::operator<(const Reader& other) const {
+    return reader_id < other.reader_id;
+}
+
+bool Reader::operator>(const Reader& other) const {
+    return reader_id > other.reader_id;
 }
 
 bool Reader::operator<=(const Reader& other) const {
@@ -89,7 +90,7 @@ istream& operator>>(istream& is, Reader& reader) {
     cout << "Телефон: ";
     getline(is, reader.phone);
 
-    if (reader.full_name.empty()) {
+    if (reader.full_name.empty() || is_blank(reader.full_name)) {
         throw InvalidReaderNameException();
     }
     if (reader.phone.length() < 5) {

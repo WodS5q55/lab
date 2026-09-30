@@ -1,65 +1,44 @@
 ﻿#include "Book.h"
 #include "Reader.h"
 #include "Exceptions.h"
-#include "Utils.h"
 #include <iostream>
 
 using namespace std;
 
-Book::Book() {
-    id = 0;
-    title = "";
-    author = "";
-    year = 0;
-    pages = 0;
-    type = "";
-    borrowed_by = nullptr;
+Book::Book() : Publication(0, "—", "—", 2020, 1) {
+    type = "учебник";
 }
 
-Book::Book(int book_id, string book_title, string book_author, int pub_year, int book_pages, string book_type) {
-    validate_book_fields(book_title, book_author, pub_year, book_type);
+Book::Book(int book_id, string book_title, string book_author, int pub_year, int book_pages, string book_type)
+    : Publication(book_id, book_title, book_author, pub_year, book_pages) {
 
     if (book_pages < 1 || book_pages > 10000) {
-        throw InvalidBookDataException("некорректное количество страниц");
+        throw InvalidBookDataException("книга: страниц должно быть от 1 до 10000");
     }
 
-    id = book_id;
-    title = book_title;
-    author = book_author;
-    year = pub_year;
-    pages = book_pages;
+    if (book_type != "учебник" && book_type != "методическое пособие" && book_type != "монография") {
+        throw InvalidBookTypeException(book_type);
+    }
     type = book_type;
-    borrowed_by = nullptr;
 }
 
-int Book::get_id() const { return id; }
-string Book::get_title() const { return title; }
-string Book::get_author() const { return author; }
-int Book::get_year() const { return year; }
-int Book::get_pages() const { return pages; }
-string Book::get_type() const { return type; }
-Reader* Book::get_borrowed_by() const { return borrowed_by; }
+string Book::get_book_type() const { return type; }
 
-bool Book::is_available() const { return borrowed_by == nullptr; }
-bool Book::is_borrowed() const { return borrowed_by != nullptr; }
-
-void Book::borrow_book(Reader* reader) {
-    if (is_borrowed()) {
-        throw BookNotAvailableException();
+void Book::set_book_type(string new_type) {
+    if (new_type != "учебник" && new_type != "методическое пособие" && new_type != "монография") {
+        throw InvalidBookTypeException(new_type);
     }
-    borrowed_by = reader;
+    type = new_type;
 }
 
-void Book::return_book() {
-    if (is_available()) {
-        throw BookNotBorrowedException();
-    }
-    borrowed_by = nullptr;
+string Book::get_type() const {
+    return "Книга";
 }
 
 string Book::short_line() const {
     string status = is_available() ? "Доступна" : "Выдана";
-    return "#" + to_string(id) + " " + title + " (" + to_string(pages) + " стр.) - " + author + " [" + type + "] - " + status;
+    return "#" + to_string(id) + " [Книга] " + title + " (" + to_string(pages) + " стр.) - "
+        + author + " [" + type + "] - " + status;
 }
 
 void Book::display_info() const {
@@ -77,87 +56,6 @@ void Book::display_info() const {
     cout << "-------------------------------------------" << endl;
 }
 
-
-bool Book::operator<(const Book& other) const {
-    return pages < other.pages;
-}
-
-bool Book::operator>(const Book& other) const {
-    return pages > other.pages;
-}
-
-bool Book::operator==(const Book& other) const {
-    return year == other.year;
-}
-
-bool Book::operator!=(const Book& other) const {
-    return year != other.year;
-}
-
-bool Book::operator<=(const Book& other) const {
-    return year <= other.year;
-}
-
-bool Book::operator>=(const Book& other) const {
-    return year >= other.year;
-}
-
-ostream& operator<<(ostream& os, const Book& book) {
-    os << "Book#" << book.id
-        << " \"" << book.title << "\" - " << book.author
-        << " (" << book.year << ", " << book.pages << " стр.) [" << book.type << "] "
-        << (book.is_available() ? "Доступна" : "Выдана");
-    return os;
-}
-
-istream& operator>>(istream& is, Book& book) {
-    cout << "ID книги: ";
-    is >> book.id;
-    is.ignore();
-
-    cout << "Название: ";
-    getline(is, book.title);
-
-    cout << "Автор: ";
-    getline(is, book.author);
-
-    cout << "Год издания: ";
-    is >> book.year;
-    is.ignore();
-
-    cout << "Количество страниц: ";
-    is >> book.pages;
-    is.ignore();
-
-    if (book.pages < 1 || book.pages > 10000) {
-        throw InvalidBookDataException("количество страниц должно быть от 1 до 10000");
-    }
-
-    cout << "\nТип книги:" << endl;
-    cout << "  1. учебник" << endl;
-    cout << "  2. методическое пособие" << endl;
-    cout << "  3. монография" << endl;
-    cout << "Выберите (1-3): ";
-
-    int type_choice;
-    is >> type_choice;
-    is.ignore();
-
-    if (type_choice == 1) {
-        book.type = "учебник";
-    }
-    else if (type_choice == 2) {
-        book.type = "методическое пособие";
-    }
-    else if (type_choice == 3) {
-        book.type = "монография";
-    }
-    else {
-        throw InvalidBookTypeException("неверный выбор");
-    }
-
-    validate_book_fields(book.title, book.author, book.year, book.type);
-
-    book.borrowed_by = nullptr;
-    return is;
-}
+int Book::get_specific_value() const { return pages; }
+string Book::get_specific_field() const { return type; }
+string Book::get_specific_field_name() const { return "Тип"; }
