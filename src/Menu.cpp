@@ -117,7 +117,7 @@ void run_menu(Library& library) {
                 string author = input_non_empty_string("Автор: ");
 
                 int year = input_int_in_range("Год (1452-2026): ", 1452, 2026);
-                int pages = input_int_in_range("Страниц (1-10000): ", 1, 10000);
+                int pages = input_int_in_range("Страниц (1-1000): ", 1, 1000);
 
                 int type_choice;
                 do {

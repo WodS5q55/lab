@@ -12,7 +12,7 @@ Book::Book() : Publication(0, "—", "—", 2020, 1) {
 Book::Book(int book_id, string book_title, string book_author, int pub_year, int book_pages, string book_type)
     : Publication(book_id, book_title, book_author, pub_year, book_pages) {
 
-    if (book_pages < 1 || book_pages > 10000) {
+    if (book_pages < 1 || book_pages > 1000) {
         throw InvalidBookDataException("книга: страниц должно быть от 1 до 10000");
     }
 
