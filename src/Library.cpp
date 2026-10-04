@@ -273,13 +273,15 @@ void Library::display_reader_info(Reader* reader) {
 
 void Library::display_all_types_info() const {
     cout << "\n=== ДЕМОНСТРАЦИЯ ПОЛИМОРФИЗМА ===" << endl;
-    cout << "Все издания вызывают get_type(), get_specific_field(), get_specific_value()" << endl;
 
     for (auto* pub : publications) {
-        cout << "\nТип: " << pub->get_type() << endl;
+        cout << "\n--- " << pub->get_type() << " ---" << endl;
         cout << "Название: " << pub->get_title() << endl;
+        cout << "Автор: " << pub->get_author() << endl;
+        cout << "Год: " << pub->get_year() << endl;
+        cout << "Страниц: " << pub->get_pages() << endl;
         cout << pub->get_specific_field_name() << ": " << pub->get_specific_field() << endl;
-        cout << "Числовое значение: " << pub->get_specific_value() << endl;
+        cout << "Стоимость: " << pub->calculate_specific_value() << " руб." << endl;
     }
 }
 

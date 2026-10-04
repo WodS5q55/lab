@@ -19,7 +19,6 @@ protected:
 
 public:
     Publication(int pub_id, string pub_title, string pub_author, int pub_year, int pub_pages);
-
     virtual ~Publication();
 
     int get_id() const;
@@ -38,7 +37,7 @@ public:
     virtual string get_type() const = 0;
     virtual string short_line() const = 0;
     virtual void display_info() const = 0;
-    virtual int get_specific_value() const = 0;
+    virtual double calculate_specific_value() const = 0;
     virtual string get_specific_field() const = 0;
     virtual string get_specific_field_name() const = 0;
 

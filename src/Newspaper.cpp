@@ -25,7 +25,9 @@ Newspaper::Newspaper(int np_id, string np_title, string np_author, int np_pages,
     year = stoi(date.substr(6, 4));
 }
 
-string Newspaper::get_publication_date() const { return publication_date; }
+string Newspaper::get_publication_date() const {
+    return publication_date;
+}
 
 void Newspaper::set_publication_date(string new_date) {
     if (!is_valid_date(new_date)) {
@@ -53,6 +55,7 @@ void Newspaper::display_info() const {
     cout << "Год издания: " << year << endl;
     cout << "Страниц: " << pages << endl;
     cout << "Дата выпуска: " << publication_date << endl;
+    cout << "Стоимость: " << calculate_specific_value() << " руб." << endl;
     cout << "Статус: " << (is_available() ? "Доступна" : "Выдана") << endl;
     if (is_borrowed()) {
         cout << "Выдана читателю: " << borrowed_by->get_name() << endl;
@@ -60,6 +63,17 @@ void Newspaper::display_info() const {
     cout << "-------------------------------------------" << endl;
 }
 
-int Newspaper::get_specific_value() const { return year; }
-string Newspaper::get_specific_field() const { return publication_date; }
-string Newspaper::get_specific_field_name() const { return "Дата выпуска"; }
+double Newspaper::calculate_specific_value() const {
+    double base_price = 15.0;
+    double pages_cost = pages * 1.0;
+
+    return base_price + pages_cost;
+}
+
+string Newspaper::get_specific_field() const {
+    return publication_date;
+}
+
+string Newspaper::get_specific_field_name() const {
+    return "Дата выпуска";
+}

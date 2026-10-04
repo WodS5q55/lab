@@ -9,9 +9,11 @@ Publication::Publication(int pub_id, string pub_title, string pub_author, int pu
     if (pub_title.empty() || pub_author.empty()) {
         throw InvalidBookDataException("название или автор пустые");
     }
-
-    if (pub_pages < 1 || pub_pages > 10000) {
-        throw InvalidBookDataException("некорректное количество страниц");
+    if (pub_year < 1452 || pub_year > 2026) {
+        throw InvalidYearException(pub_year);
+    }
+    if (pub_pages < 1) {
+        throw InvalidBookDataException("количество страниц должно быть положительным");
     }
 
     id = pub_id;

@@ -31,6 +31,15 @@ void Magazine::set_issue_number(int new_issue) {
     issue_number = new_issue;
 }
 
+bool Magazine::is_latest_issue(int current_issue) const {
+    return issue_number == current_issue;
+}
+
+bool Magazine::is_recent() const {
+    int current_year = 2026;
+    return (current_year - year) <= 1;
+}
+
 string Magazine::get_type() const {
     return "Журнал";
 }
@@ -49,6 +58,7 @@ void Magazine::display_info() const {
     cout << "Год издания: " << year << endl;
     cout << "Страниц: " << pages << endl;
     cout << "Номер выпуска: " << issue_number << endl;
+    cout << "Стоимость: " << calculate_specific_value() << " руб." << endl;
     cout << "Статус: " << (is_available() ? "Доступна" : "Выдана") << endl;
     if (is_borrowed()) {
         cout << "Выдана читателю: " << borrowed_by->get_name() << endl;
@@ -56,6 +66,13 @@ void Magazine::display_info() const {
     cout << "-------------------------------------------" << endl;
 }
 
-int Magazine::get_specific_value() const { return issue_number; }
+double Magazine::calculate_specific_value() const {
+    double base_price = 100.0;
+    double issue_cost = issue_number * 5.0;
+    double pages_cost = pages * 2.0;
+
+    return base_price + issue_cost + pages_cost;
+}
+
 string Magazine::get_specific_field() const { return to_string(issue_number); }
 string Magazine::get_specific_field_name() const { return "Номер выпуска"; }

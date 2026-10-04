@@ -14,10 +14,14 @@ public:
     string get_book_type() const;
     void set_book_type(string new_type);
 
+    bool is_for_students() const;
+    bool is_too_old_for_study() const;
+    int get_difficulty_level() const;
+
     string get_type() const override;
     string short_line() const override;
     void display_info() const override;
-    int get_specific_value() const override;
+    double calculate_specific_value() const override;
     string get_specific_field() const override;
     string get_specific_field_name() const override;
 };

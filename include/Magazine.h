@@ -14,10 +14,13 @@ public:
     int get_issue_number() const;
     void set_issue_number(int new_issue);
 
+    bool is_latest_issue(int current_issue) const;
+    bool is_recent() const;
+
     string get_type() const override;
     string short_line() const override;
     void display_info() const override;
-    int get_specific_value() const override;
+    double calculate_specific_value() const override;
     string get_specific_field() const override;
     string get_specific_field_name() const override;
 };
