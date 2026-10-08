@@ -58,7 +58,7 @@ void Magazine::display_info() const {
     cout << "Год издания: " << year << endl;
     cout << "Страниц: " << pages << endl;
     cout << "Номер выпуска: " << issue_number << endl;
-    cout << "Стоимость: " << calculate_specific_value() << " руб." << endl;
+    cout << "Стоимость: " << calculate_price() << " руб." << endl;
     cout << "Статус: " << (is_available() ? "Доступна" : "Выдана") << endl;
     if (is_borrowed()) {
         cout << "Выдана читателю: " << borrowed_by->get_name() << endl;
@@ -66,10 +66,10 @@ void Magazine::display_info() const {
     cout << "-------------------------------------------" << endl;
 }
 
-double Magazine::calculate_specific_value() const {
-    double base_price = 100.0;
-    double issue_cost = issue_number * 5.0;
-    double pages_cost = pages * 2.0;
+double Magazine::calculate_price() const {
+    double base_price = 5;
+    double issue_cost = issue_number * 0.3;
+    double pages_cost = pages * 0.1;
 
     return base_price + issue_cost + pages_cost;
 }

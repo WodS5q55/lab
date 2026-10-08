@@ -20,7 +20,7 @@ public:
     string get_type() const override;
     string short_line() const override;
     void display_info() const override;
-    double calculate_specific_value() const override;
+    double calculate_price() const override;
     string get_specific_field() const override;
     string get_specific_field_name() const override;
 };

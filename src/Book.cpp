@@ -65,7 +65,7 @@ void Book::display_info() const {
     cout << "Год издания: " << year << endl;
     cout << "Страниц: " << pages << endl;
     cout << "Тип: " << type << endl;
-    cout << "Стоимость: " << calculate_specific_value() << " руб." << endl;
+    cout << "Стоимость: " << calculate_price() << " руб." << endl;
     cout << "Статус: " << (is_available() ? "Доступна" : "Выдана") << endl;
     if (is_borrowed()) {
         cout << "Выдана читателю: " << borrowed_by->get_name() << endl;
@@ -73,24 +73,24 @@ void Book::display_info() const {
     cout << "-------------------------------------------" << endl;
 }
 
-double Book::calculate_specific_value() const {
+double Book::calculate_price() const {
     double price_per_page;
 
     if (type == "учебник") {
-        price_per_page = 2.0;
+        price_per_page = 0.1;
     }
     else if (type == "методическое пособие") {
-        price_per_page = 1.5;
+        price_per_page = 0.08;
     }
     else if (type == "монография") {
-        price_per_page = 3.0;
+        price_per_page = 0.15;
     }
     else {
-        price_per_page = 1.0;
+        price_per_page = 0.05;
     }
 
     return pages * price_per_page;
 }
 
 string Book::get_specific_field() const { return type; }
-string Book::g get_specific_field_name() const { return "Тип"; }
+string Book::get_specific_field_name() const { return "Тип"; }

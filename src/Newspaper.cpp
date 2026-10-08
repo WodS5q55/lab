@@ -55,7 +55,7 @@ void Newspaper::display_info() const {
     cout << "Год издания: " << year << endl;
     cout << "Страниц: " << pages << endl;
     cout << "Дата выпуска: " << publication_date << endl;
-    cout << "Стоимость: " << calculate_specific_value() << " руб." << endl;
+    cout << "Стоимость: " << calculate_price() << " руб." << endl;
     cout << "Статус: " << (is_available() ? "Доступна" : "Выдана") << endl;
     if (is_borrowed()) {
         cout << "Выдана читателю: " << borrowed_by->get_name() << endl;
@@ -63,9 +63,9 @@ void Newspaper::display_info() const {
     cout << "-------------------------------------------" << endl;
 }
 
-double Newspaper::calculate_specific_value() const {
-    double base_price = 15.0;
-    double pages_cost = pages * 1.0;
+double Newspaper::calculate_price() const {
+    double base_price = 1.0;
+    double pages_cost = pages * 0.5;
 
     return base_price + pages_cost;
 }

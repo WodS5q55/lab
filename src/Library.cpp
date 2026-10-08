@@ -22,7 +22,7 @@ Library::Library() : next_pub_id(1) {
     publications.push_back(new Book(next_pub_id++, "Практикум по программированию", "Васильева О.И.", 2021, 280, "методическое пособие"));
     publications.push_back(new Magazine(next_pub_id++, "Наука и жизнь", "Наука", 2024, 120, 5));
     publications.push_back(new Magazine(next_pub_id++, "Вокруг света", "Путешествия", 2024, 100, 3));
-    publications.push_back(new Newspaper(next_pub_id++, "Какой вред в пропусках ПнаЯВУ?", "Пресса", 24, "15.09.2026"));
+    publications.push_back(new Newspaper(next_pub_id++, "Какой вред в пропусках ПнаЯВУ? Шок Никита Драбудько, главный отличник, оказался прогульщиком!!!", "Пресса", 24, "15.09.2026"));
     publications.push_back(new Newspaper(next_pub_id++, "Известия", "Пресса",  20, "20.09.2024"));
 
     borrow_dates.resize(publications.size(), 0);
@@ -281,7 +281,7 @@ void Library::display_all_types_info() const {
         cout << "Год: " << pub->get_year() << endl;
         cout << "Страниц: " << pub->get_pages() << endl;
         cout << pub->get_specific_field_name() << ": " << pub->get_specific_field() << endl;
-        cout << "Стоимость: " << pub->calculate_specific_value() << " руб." << endl;
+        cout << "Стоимость: " << pub->calculate_price() << " руб." << endl;
     }
 }
 
