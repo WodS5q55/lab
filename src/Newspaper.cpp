@@ -70,10 +70,10 @@ double Newspaper::calculate_price() const {
     return base_price + pages_cost;
 }
 
-string Newspaper::get_specific_field() const {
+string Newspaper::get_field() const {
     return publication_date;
 }
 
-string Newspaper::get_specific_field_name() const {
+string Newspaper::get_field_name() const {
     return "Дата выпуска";
 }

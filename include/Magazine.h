@@ -21,8 +21,8 @@ public:
     string short_line() const override;
     void display_info() const override;
     double calculate_price() const override;
-    string get_specific_field() const override;
-    string get_specific_field_name() const override;
+    string get_field() const override;
+    string get_field_name() const override;
 };
 
 #endif

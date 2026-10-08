@@ -74,5 +74,5 @@ double Magazine::calculate_price() const {
     return base_price + issue_cost + pages_cost;
 }
 
-string Magazine::get_specific_field() const { return to_string(issue_number); }
-string Magazine::get_specific_field_name() const { return "Номер выпуска"; }
+string Magazine::get_field() const { return to_string(issue_number); }
+string Magazine::get_field_name() const { return "Номер выпуска"; }

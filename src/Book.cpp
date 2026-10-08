@@ -92,5 +92,5 @@ double Book::calculate_price() const {
     return pages * price_per_page;
 }
 
-string Book::get_specific_field() const { return type; }
-string Book::get_specific_field_name() const { return "Тип"; }
+string Book:: get_field() const { return type; }
+string Book::get_field_name() const { return "Тип"; }

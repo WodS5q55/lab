@@ -280,7 +280,7 @@ void Library::display_all_types_info() const {
         cout << "Автор: " << pub->get_author() << endl;
         cout << "Год: " << pub->get_year() << endl;
         cout << "Страниц: " << pub->get_pages() << endl;
-        cout << pub->get_specific_field_name() << ": " << pub->get_specific_field() << endl;
+        cout << pub->get_field_name() << ": " << pub->get_field() << endl;
         cout << "Стоимость: " << pub->calculate_price() << " руб." << endl;
     }
 }

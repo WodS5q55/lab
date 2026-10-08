@@ -38,8 +38,8 @@ public:
     virtual string short_line() const = 0;
     virtual void display_info() const = 0;
     virtual double calculate_price() const = 0;
-    virtual string get_specific_field() const = 0;
-    virtual string get_specific_field_name() const = 0;
+    virtual string get_field() const = 0;
+    virtual string get_field_name() const = 0;
 
     friend ostream& operator<<(ostream& os, const Publication& pub);
 
