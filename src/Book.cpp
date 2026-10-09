@@ -47,7 +47,7 @@ int Book::get_difficulty_level() const {
     return 1;
 }
 
-string Book::get_type() const {
+string Book::get_type4() const {
     return "Книга";
 }
 
