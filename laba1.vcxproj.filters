@@ -28,6 +28,9 @@
     <ClCompile Include="src\Publication.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\TemplateMenu.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Book.h">
@@ -55,6 +58,12 @@
       <Filter>Заголовки</Filter>
     </ClInclude>
     <ClInclude Include="include\Publication.h">
+      <Filter>Заголовки</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Collection.h">
+      <Filter>Заголовки</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TemplateMenu.h">
       <Filter>Заголовки</Filter>
     </ClInclude>
   </ItemGroup>

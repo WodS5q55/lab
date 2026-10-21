@@ -148,10 +148,12 @@
     <ClCompile Include="src\Newspaper.cpp" />
     <ClCompile Include="src\Publication.cpp" />
     <ClCompile Include="src\Reader.cpp" />
+    <ClCompile Include="src\TemplateMenu.cpp" />
     <ClCompile Include="src\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Book.h" />
+    <ClInclude Include="include\Collection.h" />
     <ClInclude Include="include\Exceptions.h" />
     <ClInclude Include="include\Library.h" />
     <ClInclude Include="include\Magazine.h" />
@@ -159,6 +161,7 @@
     <ClInclude Include="include\Newspaper.h" />
     <ClInclude Include="include\Publication.h" />
     <ClInclude Include="include\Reader.h" />
+    <ClInclude Include="include\TemplateMenu.h" />
     <ClInclude Include="include\Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
