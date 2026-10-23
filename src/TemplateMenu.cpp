@@ -139,9 +139,6 @@ void run_single_template_menu(const string& title, Collection<T>& col, function<
     } while (choice != 0);
 }
 
-template void run_single_template_menu<Publication*>(const string&, Collection<Publication*>&, function<Publication* ()>, bool);
-template void run_single_template_menu<Reader*>(const string&, Collection<Reader*>&, function<Reader* ()>, bool);
-
 void run_templates_menu(Library& library) {
     Collection<Publication*> pubCol;
     Collection<Reader*> readerCol;
