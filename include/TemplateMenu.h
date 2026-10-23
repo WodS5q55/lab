@@ -10,7 +10,7 @@
 using namespace std;
 
 template <typename T>
-void run_single_template_menu(const string& title, Collection<T>& col, function<T()> selector, bool isReader);
+void run_single_template_menu(const string& title, Collection<T>& col, function<T()> selector, bool isReader, Library& library);
 
 void run_templates_menu(Library& library);
 

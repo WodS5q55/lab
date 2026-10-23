@@ -35,7 +35,9 @@ public:
 
     const vector<Publication*>& get_publications() const;
     const vector<Reader*>& get_readers() const;
-    vector<Reader*>& get_readers_mutable();
+
+    Collection<Publication*>& get_publications_mutable();
+    Collection<Reader*>& get_readers_mutable_collection();
 
     Publication* find_publication_by_title(const string& title);
     vector<Publication*> find_available_publications();

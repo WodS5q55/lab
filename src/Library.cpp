@@ -98,7 +98,6 @@ Library& Library::operator-=(Reader* reader) {
         if (r_items[i] == reader) {
             readers.remove_by_index(i);
             cout << "[OK] Читатель удалён через -=" << endl;
-            delete reader;
             return *this;
         }
     }
@@ -113,7 +112,6 @@ void Library::add_publication(Publication* pub) {
     }
     publications.add(pub);
     borrow_dates.push_back(0);
-
 }
 
 void Library::add_reader(Reader* reader) {
@@ -123,7 +121,6 @@ void Library::add_reader(Reader* reader) {
         }
     }
     readers.add(reader);
-
 }
 
 void Library::remove_publication(Publication* pub) {
@@ -135,7 +132,6 @@ void Library::remove_publication(Publication* pub) {
         if (p_items[i] == pub) {
             publications.remove_by_index(i);
             borrow_dates.erase(borrow_dates.begin() + i);
-            delete pub;
             cout << "[OK] Издание удалено!" << endl;
             return;
         }
@@ -145,7 +141,9 @@ void Library::remove_publication(Publication* pub) {
 
 const vector<Publication*>& Library::get_publications() const { return publications.get_items(); }
 const vector<Reader*>& Library::get_readers() const { return readers.get_items(); }
-vector<Reader*>& Library::get_readers_mutable() { return readers.get_items(); }
+
+Collection<Publication*>& Library::get_publications_mutable() { return publications; }
+Collection<Reader*>& Library::get_readers_mutable_collection() { return readers; }
 
 Publication* Library::find_publication_by_title(const string& title) {
     for (auto* pub : publications.get_items()) {

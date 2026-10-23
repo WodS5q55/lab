@@ -44,11 +44,12 @@ void run_menu(Library& library) {
             continue;
         }
 
+        try {
             switch (choice) {
             case 1: library.display_all_publications(); break;
             case 2: {
                 vector<Publication*> available = library.find_available_publications();
-                if (available.empty()) { cout << "[ÎØÈÁÊÀ] Íåò äîñòóïíûõ èçäàíèé." << endl; break; }
+                if (available.empty()) { cout << "[ÎØÈÁÊÀ] ÍÅÒ ÄÎÑÒÓÏÍÛÕ ÈÇÄÀÍÈÉ." << endl; break; }
                 Publication* pub = select_publication(available, "Âûáåðèòå èçäàíèå:");
                 if (!pub) break;
                 Reader* reader = select_reader(library, "Âûáåðèòå ÷èòàòåëÿ:");
@@ -58,7 +59,7 @@ void run_menu(Library& library) {
             }
             case 3: {
                 vector<Publication*> borrowed = library.find_borrowed_publications();
-                if (borrowed.empty()) { cout << "[ÎØÈÁÊÀ] Íåò âûäàííûõ èçäàíèé." << endl; break; }
+                if (borrowed.empty()) { cout << "[ÎØÈÁÊÀ] ÍÅÒ ÂÛÄÀÍÍÛÕ ÈÇÄÀÍÈÉ." << endl; break; }
                 Publication* pub = select_publication(borrowed, "Âûáåðèòå èçäàíèå:");
                 if (!pub) break;
                 library.return_publication(pub);
@@ -82,7 +83,7 @@ void run_menu(Library& library) {
                 break;
             }
             case 8: {
-                cout << "\n--- ÄÎÁÀÂËÅÍÈÅ ÊÍÈÃÈ ---" << endl;
+                cout << "\n--- Äîáàâëåíèå êíèãè ---" << endl;
                 clear_input();
                 string title = input_non_empty_string("Íàçâàíèå: ");
                 string author = input_non_empty_string("Àâòîð: ");
@@ -90,7 +91,7 @@ void run_menu(Library& library) {
                 int pages = input_int_in_range("Ñòðàíèö (1-1000): ", 1, 1000);
                 int type_choice;
                 do {
-                    cout << "Òèï:\n  1. ó÷åáíèê\n  2. ìåòîäè÷åñêîå ïîñîáèå\n  3. ìîíîãðàôèÿ\n";
+                    cout << "Òèï:\n  1. Ó÷åáíèê\n  2. Ìåòîäè÷åñêîå ïîñîáèå\n  3. Ìîíîãðàôèÿ\n";
                     cout << "Âûáåðèòå (1-3): ";
                     cin >> type_choice;
                     if (cin.fail()) { clear_input(); continue; }
@@ -103,7 +104,7 @@ void run_menu(Library& library) {
                 break;
             }
             case 9: {
-                cout << "\n--- ÄÎÁÀÂËÅÍÈÅ ÆÓÐÍÀËÀ ---" << endl;
+                cout << "\n--- Äîáàâëåíèå æóðíàëà ---" << endl;
                 clear_input();
                 string title = input_non_empty_string("Íàçâàíèå: ");
                 string author = input_non_empty_string("Èçäàòåëüñòâî: ");
@@ -116,7 +117,7 @@ void run_menu(Library& library) {
                 break;
             }
             case 10: {
-                cout << "\n--- ÄÎÁÀÂËÅÍÈÅ ÃÀÇÅÒÛ ---" << endl;
+                cout << "\n--- Äîáàâëåíèå ãàçåòû ---" << endl;
                 clear_input();
                 string title = input_non_empty_string("Íàçâàíèå: ");
                 string author = input_non_empty_string("Èçäàòåëüñòâî: ");
@@ -125,7 +126,7 @@ void run_menu(Library& library) {
                 do {
                     cout << "Äàòà âûïóñêà (ää.ìì.ãããã): ";
                     getline(cin, date);
-                    if (!is_valid_date(date)) cout << "[ÎØÈÁÊÀ] Íåêîððåêòíàÿ äàòà!" << endl;
+                    if (!is_valid_date(date)) cout << "[ÎØÈÁÊÀ] ÍÅÊÎÐÐÅÊÒÍÀß ÄÀÒÀ!" << endl;
                 } while (!is_valid_date(date));
                 int new_id = library.get_publication_count() + 1;
                 Newspaper* new_np = new Newspaper(new_id, title, author, pages, date);
@@ -135,7 +136,7 @@ void run_menu(Library& library) {
             case 11: {
                 Publication* pub = select_any_publication(library, "Âûáåðèòå èçäàíèå äëÿ óäàëåíèÿ:");
                 if (!pub) break;
-                if (pub->is_borrowed()) { cout << "[ÎØÈÁÊÀ] Íåëüçÿ óäàëèòü âûäàííîå èçäàíèå!" << endl; break; }
+                if (pub->is_borrowed()) { cout << "[ÎØÈÁÊÀ] ÍÅËÜÇß ÓÄÀËÈÒÜ ÂÛÄÀÍÍÎÅ ÈÇÄÀÍÈÅ!" << endl; break; }
                 char confirm; cout << "Âû óâåðåíû? (y/n): "; cin >> confirm; clear_input();
                 if (confirm == 'y' || confirm == 'Y') library -= pub;
                 else cout << "Îòìåíåíî." << endl;
@@ -152,11 +153,13 @@ void run_menu(Library& library) {
                 break;
 
             case 0: cout << "\nÄî ñâèäàíèÿ!" << endl; break;
-            default: cout << "[ÎØÈÁÊÀ] Íåâåðíûé âûáîð." << endl;
+            default: cout << "[ÎØÈÁÊÀ] ÍÅÂÅÐÍÛÉ ÂÛÁÎÐ." << endl;
             }
         }
+        catch (const exception& e) {
+            cout << "[ÎØÈÁÊÀ] " << e.what() << endl;
+            clear_input();
+        }
 
-       
-
-     while (choice != 0);
+    } while (choice != 0);
 }

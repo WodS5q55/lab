@@ -25,6 +25,9 @@ public:
         if (index >= items.size()) {
             throw out_of_range("Индекс вне диапазона коллекции");
         }
+        if constexpr (is_pointer_v<T>) {
+            delete items[index];
+        }
         items.erase(items.begin() + index);
     }
 

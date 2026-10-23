@@ -127,7 +127,7 @@ Reader* select_reader(Library& library, const string& prompt) {
     }
     int idx = select_from_list(lines, prompt);
     if (idx < 0) return nullptr;
-    return library.get_readers_mutable()[idx];
+    return readers[idx];
 }
 
 Publication* select_any_publication(Library& library, const string& prompt) {
