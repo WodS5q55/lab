@@ -27,7 +27,6 @@ void run_single_template_menu(const string& title, Collection<T>& col, function<
         cin >> choice;
         if (cin.fail()) { clear_input(); continue; }
 
-        try {
             switch (choice) {
             case 1: {
                 T item = selector();
@@ -133,11 +132,9 @@ void run_single_template_menu(const string& title, Collection<T>& col, function<
             default: cout << "[ÎØÈÁÊÀ] Íåâåðíûé âûáîð." << endl;
             }
         }
-        catch (const exception& e) {
-            cout << "[ÎØÈÁÊÀ] " << e.what() << endl; clear_input();
-        }
+     
     } while (choice != 0);
-}
+
 
 void run_templates_menu(Library& library) {
     Collection<Publication*> pubCol;

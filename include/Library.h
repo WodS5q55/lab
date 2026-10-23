@@ -3,7 +3,7 @@
 
 #include "Publication.h"
 #include "Reader.h"
-#include <vector>
+#include "Collection.h"
 #include <string>
 #include <ctime>
 
@@ -11,8 +11,8 @@ using namespace std;
 
 class Library {
 private:
-    vector<Publication*> publications;
-    vector<Reader> readers;
+    Collection<Publication*> publications;
+    Collection<Reader*> readers;
     vector<time_t> borrow_dates;
 
     static const int MAX_BORROW_DAYS = 14;
@@ -26,16 +26,16 @@ public:
 
     Library& operator+=(Publication* pub);
     Library& operator-=(Publication* pub);
-    Library& operator+=(const Reader& reader);
-    Library& operator-=(const Reader& reader);
+    Library& operator+=(Reader* reader);
+    Library& operator-=(Reader* reader);
 
     void add_publication(Publication* pub);
-    void add_reader(const Reader& reader);
+    void add_reader(Reader* reader);
     void remove_publication(Publication* pub);
 
     const vector<Publication*>& get_publications() const;
-    const vector<Reader>& get_readers() const;
-    vector<Reader>& get_readers_mutable();
+    const vector<Reader*>& get_readers() const;
+    vector<Reader*>& get_readers_mutable();
 
     Publication* find_publication_by_title(const string& title);
     vector<Publication*> find_available_publications();

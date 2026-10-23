@@ -47,6 +47,9 @@ public:
     size_t size() const { return items.size(); }
     void clear() { items.clear(); }
 
+    vector<T>& get_items() { return items; }
+    const vector<T>& get_items() const { return items; }
+
     void print_publications() const {
         if (items.empty()) {
             cout << "[Коллекция пуста]" << endl;

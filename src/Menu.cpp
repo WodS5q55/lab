@@ -44,7 +44,6 @@ void run_menu(Library& library) {
             continue;
         }
 
-        try {
             switch (choice) {
             case 1: library.display_all_publications(); break;
             case 2: {
@@ -74,11 +73,11 @@ void run_menu(Library& library) {
             }
             case 6: library.display_overdue_publications(); break;
             case 7: {
-                cout << "\n--- ÐÅÃÈÑÒÐÀÖÈß ×ÈÒÀÒÅËß ---" << endl;
+                cout << "\n--- Ðåãèñòðàöèÿ ÷èòàòåëÿ ---" << endl;
                 clear_input();
-                Reader new_reader;
-                cin >> new_reader;
-                cout << "\nÑîçäàí: " << new_reader << endl;
+                string name = input_non_empty_string("ÔÈÎ: ");
+                string phone = input_non_empty_string("Òåëåôîí: ");
+                Reader* new_reader = new Reader(name, phone);
                 library += new_reader;
                 break;
             }
@@ -145,7 +144,7 @@ void run_menu(Library& library) {
             case 12: {
                 Reader* reader = select_reader(library, "Âûáåðèòå ÷èòàòåëÿ:");
                 if (!reader) break;
-                library -= *reader;
+                library -= reader;
                 break;
             }
             case 13:
@@ -156,10 +155,8 @@ void run_menu(Library& library) {
             default: cout << "[ÎØÈÁÊÀ] Íåâåðíûé âûáîð." << endl;
             }
         }
-        catch (const exception& e) {
-            cout << "[ÎØÈÁÊÀ] " << e.what() << endl;
-            clear_input();
-        }
 
-    } while (choice != 0);
+       
+
+     while (choice != 0);
 }

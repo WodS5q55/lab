@@ -120,14 +120,14 @@ Publication* select_publication(vector<Publication*>& candidates, const string& 
 
 Reader* select_reader(Library& library, const string& prompt) {
     vector<string> lines;
-    vector<Reader>& readers = library.get_readers_mutable();
-    for (const auto& reader : readers) {
-        lines.push_back(reader.get_name() + " (ID: " + to_string(reader.get_id())
-            + ", тел.: " + reader.get_phone() + ")");
+    const vector<Reader*>& readers = library.get_readers();
+    for (const auto* reader : readers) {
+        lines.push_back(reader->get_name() + " (ID: " + to_string(reader->get_id())
+            + ", тел.: " + reader->get_phone() + ")");
     }
     int idx = select_from_list(lines, prompt);
     if (idx < 0) return nullptr;
-    return &readers[static_cast<size_t>(idx)];
+    return library.get_readers_mutable()[idx];
 }
 
 Publication* select_any_publication(Library& library, const string& prompt) {
