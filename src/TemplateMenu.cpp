@@ -2,6 +2,7 @@
 #include "Collection.h"
 #include "Utils.h"
 #include <iostream>
+#include <type_traits>
 
 using namespace std;
 
@@ -57,8 +58,8 @@ void run_single_template_menu(const string& title, Collection<T>& col, function<
                 cin >> idx; clear_input();
                 T item = col.get_by_index(idx);
                 cout << "Найден объект: ";
-                if (isReader) cout << ((Reader*)item)->get_name();
-                else cout << ((Publication*)item)->get_title();
+                if constexpr (is_same_v<T, Publication*>) cout << item->get_title();
+                else if constexpr (is_same_v<T, Reader*>) cout << item->get_name();
                 cout << endl;
                 break;
             }
@@ -80,16 +81,52 @@ void run_single_template_menu(const string& title, Collection<T>& col, function<
                 break;
             case 7: {
                 if (col.size() == 0) { cout << "Коллекция пуста." << endl; break; }
-                cout << "Введите строку для поиска: ";
-                string query;
-                clear_input();
-                getline(cin, query);
 
-                auto res = find_by_criteria(col, [query](T item) {
+                cout << "Выберите критерий поиска:" << endl;
+
+                if constexpr (is_same_v<T, Publication*>) {
+                    cout << "  1. Только доступные издания" << endl;
+                    cout << "  2. Только выданные издания" << endl;
+                }
+                else {
+                    cout << "  1. Читатели с четным ID" << endl;
+                    cout << "  2. Читатели с нечетным ID" << endl;
+                }
+
+                int criteria_choice;
+                cout << "Ваш выбор: ";
+                cin >> criteria_choice;
+                clear_input();
+
+            
+                auto res = find_by_criteria(col, [criteria_choice](T item) -> bool {
                     if (item == nullptr) return false;
-                    return true;
+
+                    if constexpr (is_same_v<T, Publication*>) {
+                
+                        if (criteria_choice == 1) return item->is_available(); 
+                        if (criteria_choice == 2) return item->is_borrowed();  
+                    }
+                    else if constexpr (is_same_v<T, Reader*>) {
+            
+                        if (criteria_choice == 1) return item->get_id() % 2 == 0;
+                        if (criteria_choice == 2) return item->get_id() % 2 != 0; 
+                    }
+                    return false;
                     });
-                cout << "Найдено элементов: " << res.size() << endl;
+
+                cout << "\nНайдено элементов: " << res.size() << endl;
+
+                for (size_t i = 0; i < res.size(); ++i) {
+                    cout << "[" << i << "] ";
+                    if constexpr (is_same_v<T, Publication*>) {
+                        cout << res[i]->get_title() << " ("
+                            << (res[i]->is_available() ? "Доступно" : "Выдано") << ")" << endl;
+                    }
+                    else {
+                        cout << res[i]->get_name() << " (ID: " << res[i]->get_id() << ")" << endl;
+                    }
+                }
                 break;
             }
             case 0: break;
@@ -112,10 +149,10 @@ void run_templates_menu(Library& library) {
     int choice;
     do {
         cout << "\n===========================================" << endl;
-        cout << "   МЕНЮ ШАБЛОНОВ COLLECTION<T> (ЛР №5)" << endl;
+        cout << "   МЕНЮ ШАБЛОНОВ " << endl;
         cout << "===========================================" << endl;
         cout << "1. Работа с коллекцией ИЗДАНИЙ" << endl;
-        cout << "2. Работа с коллекцией ЧИТАТЕЛЕЙ " << endl;
+        cout << "2. Работа с коллекцией ЧИТАТЕЛЕЙ" << endl;
         cout << "0. Назад в главное меню" << endl;
         cout << "-------------------------------------------" << endl;
         cout << "Выберите действие: ";
