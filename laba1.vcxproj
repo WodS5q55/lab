@@ -152,6 +152,17 @@
     <ClCompile Include="src\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Exceptions\AllExceptions.h" />
+    <ClInclude Include="Exceptions\BookIsBorrowedException.h" />
+    <ClInclude Include="Exceptions\BookNotAvailableException.h" />
+    <ClInclude Include="Exceptions\DuplicateBookException.h" />
+    <ClInclude Include="Exceptions\DuplicateException.h" />
+    <ClInclude Include="Exceptions\DuplicateReaderException.h" />
+    <ClInclude Include="Exceptions\InvalidDateException.h" />
+    <ClInclude Include="Exceptions\InvalidInputException.h" />
+    <ClInclude Include="Exceptions\InvalidPhoneException.h" />
+    <ClInclude Include="Exceptions\InvalidYearException.h" />
+    <ClInclude Include="Exceptions\OperationException.h" />
     <ClInclude Include="include\Book.h" />
     <ClInclude Include="include\Collection.h" />
     <ClInclude Include="include\Exceptions.h" />

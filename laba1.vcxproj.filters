@@ -66,6 +66,39 @@
     <ClInclude Include="include\TemplateMenu.h">
       <Filter>Заголовки</Filter>
     </ClInclude>
+    <ClInclude Include="Exceptions\AllExceptions.h">
+      <Filter>Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Exceptions\DuplicateException.h">
+      <Filter>Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Exceptions\OperationException.h">
+      <Filter>Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Exceptions\InvalidPhoneException.h">
+      <Filter>Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Exceptions\InvalidYearException.h">
+      <Filter>Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Exceptions\InvalidDateException.h">
+      <Filter>Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Exceptions\InvalidInputException.h">
+      <Filter>Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Exceptions\BookIsBorrowedException.h">
+      <Filter>Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Exceptions\BookNotAvailableException.h">
+      <Filter>Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Exceptions\DuplicateReaderException.h">
+      <Filter>Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Exceptions\DuplicateBookException.h">
+      <Filter>Exceptions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Заголовки">
@@ -73,6 +106,9 @@
     </Filter>
     <Filter Include="src">
       <UniqueIdentifier>{86291b0f-88db-4e6a-ac33-2e72ab48fa18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Exceptions">
+      <UniqueIdentifier>{f4f7de8d-f3a6-4592-b1ba-6b48405264a6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

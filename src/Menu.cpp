@@ -4,8 +4,8 @@
 #include "Magazine.h"
 #include "Newspaper.h"
 #include "TemplateMenu.h"
+#include "../Exceptions/AllExceptions.h"
 #include <iostream>
-#include <limits>
 
 using namespace std;
 
@@ -136,10 +136,7 @@ void run_menu(Library& library) {
             case 11: {
                 Publication* pub = select_any_publication(library, "Âûáåðèòå èçäàíèå äëÿ óäàëåíèÿ:");
                 if (!pub) break;
-                if (pub->is_borrowed()) { cout << "[ÎØÈÁÊÀ] ÍÅËÜÇß ÓÄÀËÈÒÜ ÂÛÄÀÍÍÎÅ ÈÇÄÀÍÈÅ!" << endl; break; }
-                char confirm; cout << "Âû óâåðåíû? (y/n): "; cin >> confirm; clear_input();
-                if (confirm == 'y' || confirm == 'Y') library -= pub;
-                else cout << "Îòìåíåíî." << endl;
+                library -= pub;
                 break;
             }
             case 12: {
@@ -148,17 +145,41 @@ void run_menu(Library& library) {
                 library -= reader;
                 break;
             }
-            case 13:
-                run_templates_menu(library);
-                break;
-
+            case 13: run_templates_menu(library); break;
             case 0: cout << "\nÄî ñâèäàíèÿ!" << endl; break;
             default: cout << "[ÎØÈÁÊÀ] ÍÅÂÅÐÍÛÉ ÂÛÁÎÐ." << endl;
             }
         }
-        catch (const exception& e) {
-            cout << "[ÎØÈÁÊÀ] " << e.what() << endl;
+        catch (const InvalidInputException& e) {
+            cout << "\n[ÎØÈÁÊÀ ÂÂÎÄÀ] " << e.what() << "\nÏîïðîáóéòå ñíîâà." << endl;
             clear_input();
+        }
+        catch (const InvalidYearException& e) {
+            cout << "\n[ÎØÈÁÊÀ ÄÀÍÍÛÕ] " << e.what() << endl;
+        }
+        catch (const InvalidPhoneException& e) {
+            cout << "\n[ÎØÈÁÊÀ ÄÀÍÍÛÕ] " << e.what() << endl;
+        }
+        catch (const InvalidDateException& e) {
+            cout << "\n[ÎØÈÁÊÀ ÄÀÍÍÛÕ] " << e.what() << endl;
+        }
+        catch (const DuplicateBookException& e) {
+            cout << "\n[ÄÓÁËÈÊÀÒ] " << e.what() << endl;
+        }
+        catch (const DuplicateReaderException& e) {
+            cout << "\n[ÄÓÁËÈÊÀÒ] " << e.what() << endl;
+        }
+        catch (const BookIsBorrowedException& e) {
+            cout << "\n[ÎØÈÁÊÀ ÓÄÀËÅÍÈß] " << e.what() << endl;
+        }
+        catch (const BookNotAvailableException& e) {
+            cout << "\n[ÎØÈÁÊÀ ÎÏÅÐÀÖÈÈ] " << e.what() << endl;
+        }
+        catch (const out_of_range& e) {
+            cout << "\n[ÎØÈÁÊÀ ÄÈÀÏÀÇÎÍÀ] " << e.what() << endl;
+        }
+        catch (const exception& e) {
+            cout << "\n[ÍÅÈÇÂÅÑÒÍÀß ÎØÈÁÊÀ] " << e.what() << endl;
         }
 
     } while (choice != 0);

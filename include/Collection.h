@@ -6,6 +6,7 @@
 #include <string>
 #include <stdexcept>
 #include <type_traits>
+#include "../Exceptions/AllExceptions.h"
 #include "Publication.h"
 #include "Reader.h"
 
@@ -23,7 +24,7 @@ public:
 
     void remove_by_index(size_t index) {
         if (index >= items.size()) {
-            throw out_of_range("Индекс вне диапазона коллекции");
+            throw out_of_range("Индекс выходит за пределы коллекции");
         }
         if constexpr (is_pointer_v<T>) {
             delete items[index];
@@ -33,7 +34,7 @@ public:
 
     T get_by_index(size_t index) const {
         if (index >= items.size()) {
-            throw out_of_range("Индекс вне диапазона коллекции");
+            throw out_of_range("Индекс выходит за пределы коллекции");
         }
         return items[index];
     }
@@ -54,29 +55,19 @@ public:
     const vector<T>& get_items() const { return items; }
 
     void print_publications() const {
-        if (items.empty()) {
-            cout << "[Коллекция пуста]" << endl;
-            return;
-        }
+        if (items.empty()) { cout << "[Коллекция пуста]" << endl; return; }
         for (size_t i = 0; i < items.size(); ++i) {
             cout << "[" << i << "] ";
-            if constexpr (is_same_v<T, Publication*>) {
-                cout << items[i]->get_title();
-            }
+            if constexpr (is_same_v<T, Publication*>) cout << items[i]->get_title();
             cout << endl;
         }
     }
 
     void print_readers() const {
-        if (items.empty()) {
-            cout << "[Коллекция пуста]" << endl;
-            return;
-        }
+        if (items.empty()) { cout << "[Коллекция пуста]" << endl; return; }
         for (size_t i = 0; i < items.size(); ++i) {
             cout << "[" << i << "] ";
-            if constexpr (is_same_v<T, Reader*>) {
-                cout << items[i]->get_name();
-            }
+            if constexpr (is_same_v<T, Reader*>) cout << items[i]->get_name();
             cout << endl;
         }
     }
@@ -87,9 +78,7 @@ vector<T> find_by_criteria(const Collection<T>& col, Predicate condition) {
     vector<T> result;
     for (size_t i = 0; i < col.size(); ++i) {
         T item = col.get_by_index(i);
-        if (condition(item)) {
-            result.push_back(item);
-        }
+        if (condition(item)) result.push_back(item);
     }
     return result;
 }

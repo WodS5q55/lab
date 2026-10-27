@@ -3,7 +3,7 @@
 #include "Magazine.h"
 #include "Newspaper.h"
 #include "Utils.h"
-#include "Exceptions.h"
+#include "../Exceptions/AllExceptions.h"
 #include <iostream>
 #include <algorithm>
 
@@ -40,20 +40,14 @@ Library::Library() : next_pub_id(1) {
 }
 
 Library::~Library() {
-    for (auto* pub : publications.get_items()) {
-        delete pub;
-    }
-    for (auto* reader : readers.get_items()) {
-        delete reader;
-    }
+    for (auto* pub : publications.get_items()) delete pub;
+    for (auto* reader : readers.get_items()) delete reader;
 }
 
 int Library::find_pub_index(const Publication* pub) const {
     const auto& items = publications.get_items();
     for (size_t i = 0; i < items.size(); i++) {
-        if (items[i] == pub) {
-            return static_cast<int>(i);
-        }
+        if (items[i] == pub) return static_cast<int>(i);
     }
     return -1;
 }
@@ -62,13 +56,11 @@ int Library::get_days_left(const Publication* pub) const {
     int idx = find_pub_index(pub);
     if (idx == -1) return 0;
     if (borrow_dates[idx] == 0) return 0;
-
     time_t borrow = borrow_dates[idx];
     time_t now = time(0);
     int borrow_days = static_cast<int>(borrow / (24 * 60 * 60));
     int now_days = static_cast<int>(now / (24 * 60 * 60));
     int days_passed = now_days - borrow_days;
-
     return MAX_BORROW_DAYS - days_passed;
 }
 
@@ -97,11 +89,11 @@ Library& Library::operator-=(Reader* reader) {
     for (size_t i = 0; i < r_items.size(); i++) {
         if (r_items[i] == reader) {
             readers.remove_by_index(i);
-            cout << "[OK] Читатель удалён через -=" << endl;
+            cout << "[OK] Читатель удалён" << endl;
             return *this;
         }
     }
-    throw ReaderNotFoundException();
+    return *this;
 }
 
 void Library::add_publication(Publication* pub) {
@@ -136,7 +128,6 @@ void Library::remove_publication(Publication* pub) {
             return;
         }
     }
-    throw BookNotFoundException();
 }
 
 const vector<Publication*>& Library::get_publications() const { return publications.get_items(); }
@@ -176,43 +167,29 @@ Reader* Library::find_reader_by_id(int id) {
 }
 
 void Library::borrow_publication(Publication* pub, Reader* reader) {
-    try {
-        pub->borrow_book(reader);
-        int idx = find_pub_index(pub);
-        if (idx == -1) throw BookNotFoundException();
-        borrow_dates[idx] = time(0);
-
-        cout << "[OK] Издание \"" << pub->get_title() << "\" выдано "
-            << reader->get_name() << endl;
-    }
-    catch (const exception& e) {
-        throw BorrowException(e.what());
-    }
+    if (pub->is_borrowed()) throw BookNotAvailableException();
+    pub->borrow_book(reader);
+    int idx = find_pub_index(pub);
+    if (idx != -1) borrow_dates[idx] = time(0);
+    cout << "[OK] Издание \"" << pub->get_title() << "\" выдано " << reader->get_name() << endl;
 }
 
 void Library::return_publication(Publication* pub) {
-    try {
-        Reader* reader = pub->get_borrowed_by();
-        pub->return_book();
-        int idx = find_pub_index(pub);
-        if (idx != -1) borrow_dates[idx] = 0;
-
-        cout << "[OK] Издание \"" << pub->get_title() << "\" возвращено";
-        if (reader) cout << " (читатель " << reader->get_name() << ")";
-        cout << endl;
-    }
-    catch (const exception& e) {
-        throw ReturnException(e.what());
-    }
+    if (!pub->is_borrowed()) throw BookNotAvailableException();
+    Reader* reader = pub->get_borrowed_by();
+    pub->return_book();
+    int idx = find_pub_index(pub);
+    if (idx != -1) borrow_dates[idx] = 0;
+    cout << "[OK] Издание \"" << pub->get_title() << "\" возвращено";
+    if (reader) cout << " (читатель " << reader->get_name() << ")";
+    cout << endl;
 }
 
 void Library::display_all_publications() const {
     cout << "\nКАТАЛОГ ИЗДАНИЙ (" << publications.size() << " шт.)" << endl;
     cout << "-------------------------------------------" << endl;
-
     for (auto* pub : publications.get_items()) {
         cout << "* " << pub->short_line();
-
         if (pub->is_borrowed()) {
             int days = get_days_left(pub);
             if (days > 0) cout << " (осталось " << days << " дн.)";
@@ -227,16 +204,13 @@ void Library::display_all_publications() const {
 void Library::display_all_readers() const {
     cout << "\nСПИСОК ЧИТАТЕЛЕЙ (" << readers.size() << " чел.)" << endl;
     cout << "-------------------------------------------" << endl;
-    for (auto* reader : readers.get_items()) {
-        cout << *reader << endl;
-    }
+    for (auto* reader : readers.get_items()) cout << *reader << endl;
     cout << "-------------------------------------------" << endl;
 }
 
 void Library::display_overdue_publications() const {
     cout << "\nПРОСРОЧЕННЫЕ ИЗДАНИЯ:" << endl;
     cout << "-------------------------------------------" << endl;
-
     bool has_overdue = false;
     for (auto* pub : publications.get_items()) {
         if (pub->is_borrowed()) {
@@ -249,19 +223,12 @@ void Library::display_overdue_publications() const {
             }
         }
     }
-
     if (!has_overdue) cout << "Просроченных изданий нет" << endl;
     cout << "-------------------------------------------" << endl;
 }
 
-void Library::display_publication_info(Publication* pub) {
-    pub->display_info();
-}
-
-void Library::display_reader_info(Reader* reader) {
-    cout << *reader << endl;
-    reader->display_info();
-}
+void Library::display_publication_info(Publication* pub) { pub->display_info(); }
+void Library::display_reader_info(Reader* reader) { cout << *reader << endl; reader->display_info(); }
 
 void Library::display_all_types_info() const {
     cout << "\n=== ДЕМОНСТРАЦИЯ ПОЛИМОРФИЗМА ===" << endl;
@@ -279,28 +246,22 @@ void Library::display_all_types_info() const {
 void Library::compare_two_publications() const {
     cout << "\n--- СРАВНЕНИЕ ДВУХ ИЗДАНИЙ ---" << endl;
     if (publications.size() < 2) { cout << "[ОШИБКА] В библиотеке меньше двух изданий." << endl; return; }
-
     vector<string> lines1;
     for (const auto* p : publications.get_items()) lines1.push_back(p->short_line());
     int idx1 = select_from_list(lines1, "Выберите первое издание:");
     if (idx1 < 0) return;
-
     vector<string> lines2;
     for (const auto* p : publications.get_items()) lines2.push_back(p->short_line());
     int idx2 = select_from_list(lines2, "Выберите второе издание:");
     if (idx2 < 0) return;
-
     const Publication* p1 = publications.get_items()[idx1];
     const Publication* p2 = publications.get_items()[idx2];
-
     cout << "\n--- ВЫБРАННЫЕ ИЗДАНИЯ ---" << endl;
     cout << "Издание 1: " << *p1 << endl;
     cout << "Издание 2: " << *p2 << endl;
-
     cout << "\n--- СРАВНЕНИЕ ПО СТРАНИЦАМ ---" << endl;
     cout << "p1 < p2 (по страницам)?  " << (*p1 < *p2 ? "ДА" : "НЕТ") << endl;
     cout << "p1 > p2 (по страницам)?  " << (*p1 > *p2 ? "ДА" : "НЕТ") << endl;
-
     cout << "\n--- СРАВНЕНИЕ ПО ГОДУ ---" << endl;
     cout << "p1 == p2 (по году)?  " << (*p1 == *p2 ? "ДА" : "НЕТ") << endl;
     cout << "p1 != p2 (по году)?  " << (*p1 != *p2 ? "ДА" : "НЕТ") << endl;
@@ -311,20 +272,16 @@ void Library::compare_two_publications() const {
 void Library::compare_two_readers() const {
     cout << "\n--- СРАВНЕНИЕ ДВУХ ЧИТАТЕЛЕЙ ---" << endl;
     if (readers.size() < 2) { cout << "[ОШИБКА] Меньше двух читателей." << endl; return; }
-
     vector<string> lines1;
     for (const auto* r : readers.get_items()) lines1.push_back(r->get_name() + " (ID: " + to_string(r->get_id()) + ")");
     int idx1 = select_from_list(lines1, "Выберите первого читателя:");
     if (idx1 < 0) return;
-
     vector<string> lines2;
     for (const auto* r : readers.get_items()) lines2.push_back(r->get_name() + " (ID: " + to_string(r->get_id()) + ")");
     int idx2 = select_from_list(lines2, "Выберите второго читателя:");
     if (idx2 < 0) return;
-
     const Reader* r1 = readers.get_items()[idx1];
     const Reader* r2 = readers.get_items()[idx2];
-
     cout << "\nЧитатель 1: " << *r1 << endl;
     cout << "Читатель 2: " << *r2 << endl;
     cout << "r1 < r2 (по ID)?    " << (*r1 < *r2 ? "ДА" : "НЕТ") << endl;
@@ -334,7 +291,7 @@ void Library::compare_two_readers() const {
 }
 
 void Library::change_reader_name(Reader* reader, string new_name) {
-    if (new_name.empty() || is_blank(new_name)) throw InvalidReaderNameException();
+    if (new_name.empty() || is_blank(new_name)) throw InvalidInputException("имя не может быть пустым");
     for (const auto* r : readers.get_items()) {
         if (r != reader && r->get_name() == new_name) throw DuplicateReaderException(new_name);
     }
