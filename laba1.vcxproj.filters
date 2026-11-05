@@ -36,9 +36,6 @@
     <ClInclude Include="include\Book.h">
       <Filter>Заголовки</Filter>
     </ClInclude>
-    <ClInclude Include="include\Exceptions.h">
-      <Filter>Заголовки</Filter>
-    </ClInclude>
     <ClInclude Include="include\Library.h">
       <Filter>Заголовки</Filter>
     </ClInclude>
@@ -67,12 +64,6 @@
       <Filter>Заголовки</Filter>
     </ClInclude>
     <ClInclude Include="Exceptions\AllExceptions.h">
-      <Filter>Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="Exceptions\DuplicateException.h">
-      <Filter>Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="Exceptions\OperationException.h">
       <Filter>Exceptions</Filter>
     </ClInclude>
     <ClInclude Include="Exceptions\InvalidPhoneException.h">
