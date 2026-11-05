@@ -90,6 +90,9 @@
     <ClInclude Include="Exceptions\DuplicateBookException.h">
       <Filter>Exceptions</Filter>
     </ClInclude>
+    <ClInclude Include="Exceptions\IndexOutOfRangeException.h">
+      <Filter>Exceptions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Заголовки">

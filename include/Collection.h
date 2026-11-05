@@ -24,7 +24,7 @@ public:
 
     void remove_by_index(size_t index) {
         if (index >= items.size()) {
-            throw out_of_range("Индекс выходит за пределы коллекции");
+            throw IndexOutOfRangeException(index, items.size());
         }
         if constexpr (is_pointer_v<T>) {
             delete items[index];
@@ -34,7 +34,7 @@ public:
 
     T get_by_index(size_t index) const {
         if (index >= items.size()) {
-            throw out_of_range("Индекс выходит за пределы коллекции");
+            throw IndexOutOfRangeException(index, items.size());
         }
         return items[index];
     }

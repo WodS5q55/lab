@@ -157,6 +157,7 @@
     <ClInclude Include="Exceptions\BookNotAvailableException.h" />
     <ClInclude Include="Exceptions\DuplicateBookException.h" />
     <ClInclude Include="Exceptions\DuplicateReaderException.h" />
+    <ClInclude Include="Exceptions\IndexOutOfRangeException.h" />
     <ClInclude Include="Exceptions\InvalidDateException.h" />
     <ClInclude Include="Exceptions\InvalidInputException.h" />
     <ClInclude Include="Exceptions\InvalidPhoneException.h" />

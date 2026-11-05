@@ -175,11 +175,8 @@ void run_menu(Library& library) {
         catch (const BookNotAvailableException& e) {
             cout << "\n[ÎØÈÁÊÀ ÎÏÅÐÀÖÈÈ] " << e.what() << endl;
         }
-        catch (const out_of_range& e) {
-            cout << "\n[ÎØÈÁÊÀ ÄÈÀÏÀÇÎÍÀ] " << e.what() << endl;
-        }
-        catch (const exception& e) {
-            cout << "\n[ÍÅÈÇÂÅÑÒÍÀß ÎØÈÁÊÀ] " << e.what() << endl;
+        catch (const IndexOutOfRangeException& e) {
+            cout << "\n[ÎØÈÁÊÀ ÈÍÄÅÊÑÀ] " << e.what() << endl;
         }
 
     } while (choice != 0);

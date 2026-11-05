@@ -9,5 +9,6 @@
 #include "DuplicateReaderException.h"
 #include "BookIsBorrowedException.h"
 #include "BookNotAvailableException.h"
+#include "IndexOutOfRangeException.h"
 
 #endif
