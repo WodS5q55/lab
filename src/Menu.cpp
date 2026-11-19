@@ -6,6 +6,7 @@
 #include "TemplateMenu.h"
 #include "../Exceptions/AllExceptions.h"
 #include <iostream>
+#include "Files.h"
 
 using namespace std;
 
@@ -26,6 +27,9 @@ void show_menu(const Library& library) {
     cout << "11. Удалить издание" << endl;
     cout << "12. Удалить читателя" << endl;
     cout << "13. Меню шаблонов" << endl;
+    cout << "14. Сохранить состояние в файл" << endl;
+    cout << "15. Загрузить состояние из файла" << endl;
+    cout << "16. Сформировать отчёт" << endl;
     cout << "0.  Выход" << endl;
     cout << "-------------------------------------------" << endl;
     cout << "Выберите действие: ";
@@ -146,6 +150,21 @@ void run_menu(Library& library) {
                 break;
             }
             case 13: run_templates_menu(library); break;
+            case 14: {
+                Files::save("library_save.txt", library);
+                Files::logAction("library_log.txt", "Сохранение состояния");
+                break;
+            }
+            case 15: {
+                Files::load("library_save.txt", library);
+                Files::logAction("library_log.txt", "Загрузка состояния");
+                break;
+            }
+            case 16: {
+                Files::generateReport("library_report.txt", library);
+                Files::logAction("library_log.txt", "Генерация отчёта");
+                break;
+            }
             case 0: cout << "\nДо свидания!" << endl; break;
             default: cout << "[ОШИБКА] НЕВЕРНЫЙ ВЫБОР." << endl;
             }

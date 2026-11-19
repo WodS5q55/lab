@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Book.cpp" />
+    <ClCompile Include="src\Files.cpp" />
     <ClCompile Include="src\Library.cpp" />
     <ClCompile Include="src\Magazine.cpp" />
     <ClCompile Include="src\Main.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Exceptions\InvalidYearException.h" />
     <ClInclude Include="include\Book.h" />
     <ClInclude Include="include\Collection.h" />
+    <ClInclude Include="include\Files.h" />
     <ClInclude Include="include\Library.h" />
     <ClInclude Include="include\Magazine.h" />
     <ClInclude Include="include\Menu.h" />

@@ -1,6 +1,6 @@
 #include "Newspaper.h"
 #include "Reader.h"
-#include "Exceptions.h"
+#include "../Exceptions/AllExceptions.h"
 #include "Utils.h"
 #include <iostream>
 
@@ -14,11 +14,11 @@ Newspaper::Newspaper(int np_id, string np_title, string np_author, int np_pages,
     : Publication(np_id, np_title, np_author, 2020, np_pages) {
 
     if (!is_valid_date(date)) {
-        throw InvalidBookDataException("некорректная дата выпуска (формат: дд.мм.гггг)");
+        throw InvalidDateException();
     }
 
     if (np_pages < 1 || np_pages > 96) {
-        throw InvalidBookDataException("газета: страниц должно быть от 1 до 96");
+        throw InvalidInputException("газета: страниц должно быть от 1 до 96");
     }
 
     publication_date = date;
@@ -31,7 +31,7 @@ string Newspaper::get_publication_date() const {
 
 void Newspaper::set_publication_date(string new_date) {
     if (!is_valid_date(new_date)) {
-        throw InvalidBookDataException("некорректная дата выпуска");
+        throw InvalidDateException();
     }
     publication_date = new_date;
     year = stoi(new_date.substr(6, 4));

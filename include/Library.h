@@ -29,6 +29,11 @@ public:
     Library& operator+=(Reader* reader);
     Library& operator-=(Reader* reader);
 
+    const vector<time_t>& get_borrow_dates() const;
+    void clear_all();
+    void restore_reader_with_id(Reader* reader, int id);
+    void restore_publication(Publication* pub, time_t borrow_date);
+
     void add_publication(Publication* pub);
     void add_reader(Reader* reader);
     void remove_publication(Publication* pub);

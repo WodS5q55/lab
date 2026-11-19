@@ -1,6 +1,6 @@
 #include "Magazine.h"
 #include "Reader.h"
-#include "Exceptions.h"
+#include "../Exceptions/AllExceptions.h"
 #include <iostream>
 
 using namespace std;
@@ -13,11 +13,11 @@ Magazine::Magazine(int mag_id, string mag_title, string mag_author, int pub_year
     : Publication(mag_id, mag_title, mag_author, pub_year, mag_pages) {
 
     if (mag_pages < 1 || mag_pages > 500) {
-        throw InvalidBookDataException("журнал: страниц должно быть от 1 до 500");
+        throw InvalidInputException("журнал: страниц должно быть от 1 до 500");
     }
 
     if (issue < 1) {
-        throw InvalidBookDataException("номер выпуска должен быть положительным");
+        throw InvalidInputException("номер выпуска должен быть положительным");
     }
     issue_number = issue;
 }
@@ -26,7 +26,7 @@ int Magazine::get_issue_number() const { return issue_number; }
 
 void Magazine::set_issue_number(int new_issue) {
     if (new_issue < 1) {
-        throw InvalidBookDataException("номер выпуска должен быть положительным");
+        throw InvalidInputException("номер выпуска должен быть положительным");
     }
     issue_number = new_issue;
 }

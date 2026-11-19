@@ -1,5 +1,5 @@
 ﻿#include "Reader.h"
-#include "Exceptions.h"
+#include "../Exceptions/AllExceptions.h"
 #include "Utils.h"
 #include <iostream>
 
@@ -15,7 +15,7 @@ Reader::Reader() {
 
 Reader::Reader(string name, string phone_num) {
     if (name.empty() || is_blank(name)) {
-        throw InvalidReaderNameException();
+        throw InvalidInputException("имя читателя не может быть пустым");
     }
     if (phone_num.length() < 5) {
         throw InvalidPhoneException();
@@ -31,7 +31,7 @@ int Reader::get_id() const { return reader_id; }
 
 void Reader::set_name(string new_name) {
     if (new_name.empty() || is_blank(new_name)) {
-        throw InvalidReaderNameException();
+        throw InvalidInputException("имя читателя не может быть пустым");
     }
     full_name = new_name;
 }
@@ -41,6 +41,13 @@ void Reader::set_phone(string new_phone) {
         throw InvalidPhoneException();
     }
     phone = new_phone;
+}
+
+void Reader::set_id_restored(int id) {
+    reader_id = id;
+    if (id >= next_id) {
+        next_id = id + 1;
+    }
 }
 
 void Reader::display_info() const {
@@ -91,7 +98,7 @@ istream& operator>>(istream& is, Reader& reader) {
     getline(is, reader.phone);
 
     if (reader.full_name.empty() || is_blank(reader.full_name)) {
-        throw InvalidReaderNameException();
+        throw InvalidInputException("имя читателя не может быть пустым");
     }
     if (reader.phone.length() < 5) {
         throw InvalidPhoneException();

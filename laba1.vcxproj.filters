@@ -31,6 +31,9 @@
     <ClCompile Include="src\TemplateMenu.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Files.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Book.h">
@@ -92,6 +95,9 @@
     </ClInclude>
     <ClInclude Include="Exceptions\IndexOutOfRangeException.h">
       <Filter>Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Files.h">
+      <Filter>Заголовки</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

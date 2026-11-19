@@ -26,6 +26,8 @@ public:
 
     void display_info() const;
 
+    void set_id_restored(int id);
+
     bool operator==(const Reader& other) const;
     bool operator!=(const Reader& other) const;
     bool operator<(const Reader& other) const;

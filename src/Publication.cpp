@@ -1,19 +1,19 @@
 #include "Publication.h"
 #include "Reader.h"
-#include "Exceptions.h"
+#include "../Exceptions/AllExceptions.h"
 #include <iostream>
 
 using namespace std;
 
 Publication::Publication(int pub_id, string pub_title, string pub_author, int pub_year, int pub_pages) {
     if (pub_title.empty() || pub_author.empty()) {
-        throw InvalidBookDataException("название или автор пустые");
+        throw InvalidInputException("название или автор пустые");
     }
     if (pub_year < 1452 || pub_year > 2026) {
         throw InvalidYearException(pub_year);
     }
     if (pub_pages < 1) {
-        throw InvalidBookDataException("количество страниц должно быть положительным");
+        throw InvalidInputException("количество страниц должно быть положительным");
     }
 
     id = pub_id;
@@ -46,7 +46,7 @@ void Publication::borrow_book(Reader* reader) {
 
 void Publication::return_book() {
     if (is_available()) {
-        throw BookNotBorrowedException();
+        throw BookNotAvailableException();
     }
     borrowed_by = nullptr;
 }

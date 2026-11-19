@@ -1,6 +1,6 @@
 ﻿#include "Book.h"
 #include "Reader.h"
-#include "Exceptions.h"
+#include "../Exceptions/AllExceptions.h"
 #include <iostream>
 
 using namespace std;
@@ -13,11 +13,11 @@ Book::Book(int book_id, string book_title, string book_author, int pub_year, int
     : Publication(book_id, book_title, book_author, pub_year, book_pages) {
 
     if (book_pages < 1 || book_pages > 10000) {
-        throw InvalidBookDataException("книга: страниц должно быть от 1 до 10000");
+        throw InvalidInputException("книга: страниц должно быть от 1 до 10000");
     }
 
     if (book_type != "учебник" && book_type != "методическое пособие" && book_type != "монография") {
-        throw InvalidBookTypeException(book_type);
+        throw InvalidInputException("некорректный тип книги: " + book_type);
     }
     type = book_type;
 }
@@ -26,7 +26,7 @@ string Book::get_book_type() const { return type; }
 
 void Book::set_book_type(string new_type) {
     if (new_type != "учебник" && new_type != "методическое пособие" && new_type != "монография") {
-        throw InvalidBookTypeException(new_type);
+        throw InvalidInputException("некорректный тип книги: " + new_type);
     }
     type = new_type;
 }
@@ -92,5 +92,5 @@ double Book::calculate_price() const {
     return pages * price_per_page;
 }
 
-string Book:: get_field() const { return type; }
+string Book::get_field() const { return type; }
 string Book::get_field_name() const { return "Тип"; }

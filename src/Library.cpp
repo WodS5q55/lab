@@ -151,6 +151,30 @@ vector<Publication*> Library::find_available_publications() {
     return result;
 }
 
+const vector<time_t>& Library::get_borrow_dates() const {
+    return borrow_dates;
+}
+
+void Library::clear_all() {
+    for (auto* p : publications.get_items()) delete p;
+    for (auto* r : readers.get_items()) delete r;
+    publications.get_items().clear();
+    readers.get_items().clear();
+    borrow_dates.clear();
+    next_pub_id = 1;
+}
+
+void Library::restore_reader_with_id(Reader* reader, int id) {
+    reader->set_id_restored(id);
+    readers.add(reader);
+}
+
+void Library::restore_publication(Publication* pub, time_t borrow_date) {
+    publications.add(pub);
+    borrow_dates.push_back(borrow_date);
+    if (pub->get_id() >= next_pub_id) next_pub_id = pub->get_id() + 1;
+}
+
 vector<Publication*> Library::find_borrowed_publications() {
     vector<Publication*> result;
     for (auto* pub : publications.get_items()) {
