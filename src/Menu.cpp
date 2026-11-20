@@ -84,6 +84,8 @@ void run_menu(Library& library) {
                 string phone = input_non_empty_string("Телефон: ");
                 Reader* new_reader = new Reader(name, phone);
                 library += new_reader;
+                Files::logAction("library_log.txt",
+                    "Добавлен читатель: " + new_reader->get_name());
                 break;
             }
             case 8: {
@@ -105,6 +107,8 @@ void run_menu(Library& library) {
                 int new_id = library.get_publication_count() + 1;
                 Book* new_book = new Book(new_id, title, author, year, pages, type);
                 library += new_book;
+                Files::logAction("library_log.txt",
+                    "Добавлена книга: " + new_book->get_title());
                 break;
             }
             case 9: {
@@ -118,6 +122,8 @@ void run_menu(Library& library) {
                 int new_id = library.get_publication_count() + 1;
                 Magazine* new_mag = new Magazine(new_id, title, author, year, pages, issue);
                 library += new_mag;
+                Files::logAction("library_log.txt",
+                    "Добавлен журнал: " + new_mag->get_title());
                 break;
             }
             case 10: {
@@ -135,18 +141,26 @@ void run_menu(Library& library) {
                 int new_id = library.get_publication_count() + 1;
                 Newspaper* new_np = new Newspaper(new_id, title, author, pages, date);
                 library += new_np;
+                Files::logAction("library_log.txt",
+                    "Добавлена газета: " + new_np->get_title());
                 break;
             }
             case 11: {
                 Publication* pub = select_any_publication(library, "Выберите издание для удаления:");
+                string title = pub->get_title();
                 if (!pub) break;
                 library -= pub;
+                Files::logAction("library_log.txt",
+                    "Удалено издание: " + title);
                 break;
             }
             case 12: {
                 Reader* reader = select_reader(library, "Выберите читателя:");
+                string name = reader->get_name();
                 if (!reader) break;
                 library -= reader;
+                Files::logAction("library_log.txt",
+                    "Удалён читатель: " + name);
                 break;
             }
             case 13: run_templates_menu(library); break;
